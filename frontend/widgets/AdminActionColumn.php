@@ -8,8 +8,17 @@ use yii\helpers\Html;
 
 class AdminActionColumn extends ActionColumn
 {
-    public $contentOptions = ['class' => 'admin-table-actions'];
+    public $contentOptions = ['class' => 'admin-table-actions-column'];
     public $headerOptions = ['class' => 'admin-table-actions-column'];
+
+    protected function renderDataCellContent($model, $key, $index)
+    {
+        return Html::tag(
+            'div',
+            parent::renderDataCellContent($model, $key, $index),
+            ['class' => 'admin-table-actions']
+        );
+    }
 
     protected function initDefaultButtons()
     {

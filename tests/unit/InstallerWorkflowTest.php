@@ -50,4 +50,15 @@ class InstallerWorkflowTest extends TestCase
         self::assertTrue(InstallerWorkflow::isHttps('on'));
         self::assertTrue(InstallerWorkflow::isHttps('1'));
     }
+
+    public function testWebInstallerProvidesAjaxProgressAndAStandardFormFallback(): void
+    {
+        $source = file_get_contents(dirname(__DIR__, 2) . '/frontend/web/install.php');
+
+        self::assertStringContainsString('data-installer-form', $source);
+        self::assertStringContainsString('data-installer-loading', $source);
+        self::assertStringContainsString("fetch(form.action || window.location.href", $source);
+        self::assertStringContainsString("connect-src 'self'", $source);
+        self::assertStringContainsString('<form method="post" data-installer-form>', $source);
+    }
 }

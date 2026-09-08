@@ -63,7 +63,7 @@ $this->registerMetaTag([
                         <div class="hero-actions">
                             <?= $hasPrimary
                                 ? Html::a(Html::encode($primaryLabel), $slide->link, ['class' => 'd-btn d-btn-primary'])
-                                : Html::a(Yii::t('app', 'Start a project'), ['/site/order'], ['class' => 'd-btn d-btn-primary']) ?>
+                                : Html::a(Yii::t('app', 'Request a service'), ['/site/order'], ['class' => 'd-btn d-btn-primary']) ?>
                             <?= $hasSecondary
                                 ? Html::a(Html::encode($secondaryLabel), $slide->secondary_link, ['class' => 'd-btn d-btn-outline hero-secondary-action'])
                                 : Html::a(Yii::t('app', 'View selected work'), ['/site/sample'], ['class' => 'd-btn d-btn-outline hero-secondary-action']) ?>
@@ -91,7 +91,7 @@ $this->registerMetaTag([
     <?php elseif ($section->type === 'portfolio'): ?><div class="card-grid"><?php foreach ($portfolioItems as $item): ?><article class="card content-card home-portfolio-card"><div class="home-portfolio-image"><?= Html::img(MediaUrl::image($item->image, 'img/portfolio/commerce-experience.webp'), ['alt' => Html::encode($item->getLocalized('title')), 'loading' => 'lazy', 'width' => 768, 'height' => 512]) ?></div><div class="home-portfolio-body"><h3><?= Html::encode($item->getLocalized('title')) ?></h3><div class="content-card-summary"><?= HtmlPurifier::process($item->getLocalized('content')) ?></div></div></article><?php endforeach; ?></div><p class="section-action"><?= Html::a(Yii::t('app','View all'),['/site/sample'],['class'=>'d-btn d-btn-outline']) ?></p>
     <?php elseif ($section->type === 'posts'): ?><div class="card-grid"><?php foreach ($posts as $post): ?><article class="card content-card"><h3><?= Html::a(Html::encode($post->getLocalized('title')), ['/blog/view', 'id' => $post->id]) ?></h3><p class="content-card-summary"><?= Html::encode($post->getLocalized('description')) ?></p></article><?php endforeach; ?></div><p class="section-action"><?= Html::a(Yii::t('app','View all'),['/blog/index'],['class'=>'d-btn d-btn-outline']) ?></p>
     <?php elseif ($section->type === 'faqs'): ?><div class="faq-list"><?php foreach ($faqs as $faq): ?><details class="card faq-item"><summary><span><?= Html::encode($faq->getLocalized('question')) ?></span><span class="faq-toggle" aria-hidden="true"><?= Icon::show('chevron-down') ?></span></summary><div class="faq-answer"><?= HtmlPurifier::process($faq->getLocalized('answer')) ?></div></details><?php endforeach; ?></div>
-    <?php elseif ($section->type === 'cta'): ?><div class="home-cta-actions"><?= Html::a(Yii::t('app','Contact'),['/site/contact'],['class'=>'d-btn d-btn-primary']) ?><?= Html::a(Yii::t('app','Order app'),['/site/order'],['class'=>'d-btn d-btn-outline']) ?></div><?php endif; ?>
+    <?php elseif ($section->type === 'cta'): ?><div class="home-cta-actions"><?= Html::a(Yii::t('app','Contact'),['/site/contact'],['class'=>'d-btn d-btn-primary']) ?><?= Html::a(Yii::t('app','Service request'),['/site/order'],['class'=>'d-btn d-btn-outline']) ?></div><?php endif; ?>
 </section>
 <?php endforeach; ?>
 

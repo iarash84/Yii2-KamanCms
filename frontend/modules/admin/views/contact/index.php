@@ -75,8 +75,8 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'class' => AdminActionColumn::class,
-                'headerOptions' => ['style'=>'text-align:center;'],
-                'contentOptions' => ['style'=>'text-align:center;'],
+                'headerOptions' => ['class' => 'admin-table-actions-column'],
+                'contentOptions' => ['class' => 'admin-table-actions-column'],
                 'template' => '{detail} {delete}',
                 'buttons' => ['detail' => static fn ($url, $model) => Html::button(Icon::show('eye'), ['class' => 'd-btn d-btn-sm d-btn-square d-btn-ghost', 'data-remote-dialog-url' => Url::to(['detail', 'id' => $model->id]), 'data-error-message' => Yii::t('app', 'Unable to load details.'), 'aria-label' => Yii::t('app', 'View')])],
             ],

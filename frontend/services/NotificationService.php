@@ -18,14 +18,20 @@ class NotificationService
             return false;
         }
         self::configureMailer();
-        $body = "New {$type} submission\n\n";
+        $submissionLabels = [
+            'contact' => 'contact',
+            'order' => 'service request',
+            'opportunity' => 'job application',
+        ];
+        $submissionLabel = $submissionLabels[$type] ?? (string) $type;
+        $body = "New {$submissionLabel} submission\n\n";
         foreach ($data as $key => $value) {
             if (is_scalar($value) && !in_array($key, ['verifyCode', 'resume'], true)) {
                 $body .= $key . ': ' . strip_tags((string) $value) . "\n";
             }
         }
         try {
-            return Yii::$app->mailer->compose()->setTo($to)->setFrom([SystemSetting::getValue('mail_from_email', Yii::$app->params['supportEmail']) => SystemSetting::getValue('mail_from_name', Yii::$app->name)])->setSubject("New {$type} submission")->setTextBody($body)->send();
+            return Yii::$app->mailer->compose()->setTo($to)->setFrom([SystemSetting::getValue('mail_from_email', Yii::$app->params['supportEmail']) => SystemSetting::getValue('mail_from_name', Yii::$app->name)])->setSubject("New {$submissionLabel} submission")->setTextBody($body)->send();
         } catch (\Throwable $e) {
             Yii::warning('Form notification failed: ' . $e->getMessage(), __METHOD__);
             return false;

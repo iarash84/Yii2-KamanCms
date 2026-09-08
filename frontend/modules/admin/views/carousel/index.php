@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <th><?= Yii::t('app', 'Text') ?></th>
                     <th><?= Yii::t('app', 'Links') ?></th>
                     <th><?= Yii::t('app', 'Status') ?></th>
-                    <th><span class="sr-only"><?= Yii::t('app', 'Actions') ?></span></th>
+                    <th class="admin-table-actions-column"><span class="sr-only"><?= Yii::t('app', 'Actions') ?></span></th>
                 </tr></thead>
                 <tbody data-carousel-sorter data-save-url="<?= Url::to(['reorder']) ?>" data-csrf-param="<?= Html::encode(Yii::$app->request->csrfParam) ?>" data-csrf-token="<?= Html::encode(Yii::$app->request->csrfToken) ?>">
                 <?php foreach ($dataProvider->models as $item): ?>
@@ -51,9 +51,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?php if (!$item->link && !$item->secondary_link): ?>—<?php endif; ?>
                         </td>
                         <td><?= StatusBadge::boolean($item->status) ?></td>
-                        <td><div class="action-row">
+                        <td class="admin-table-actions-column"><div class="admin-table-actions">
                             <?= AdminButton::link(Icon::show('edit'), ['update', 'id' => $item->id], 'compact', ['aria-label' => Yii::t('app', 'Update')]) ?>
-                            <?= AdminButton::link(Icon::show('trash'), ['delete', 'id' => $item->id], 'danger-soft', ['data-method' => 'post', 'data-confirm' => Yii::t('app', 'Are you sure you want to delete this item?'), 'aria-label' => Yii::t('app', 'Delete')]) ?>
+                            <?= AdminButton::link(Icon::show('trash'), ['delete', 'id' => $item->id], 'compact', ['class' => 'admin-action-delete', 'data-method' => 'post', 'data-confirm' => Yii::t('app', 'Are you sure you want to delete this item?'), 'aria-label' => Yii::t('app', 'Delete')]) ?>
                         </div></td>
                     </tr>
                 <?php endforeach; ?>

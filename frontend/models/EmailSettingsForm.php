@@ -26,7 +26,7 @@ class EmailSettingsForm extends Model
     }
     public function attributeLabels()
     {
-        return ['smtpHost' => Yii::t('app', 'SMTP host'), 'smtpPort' => Yii::t('app', 'SMTP port'), 'smtpUsername' => Yii::t('app', 'SMTP username'), 'smtpPassword' => Yii::t('app', 'SMTP password'), 'smtpEncryption' => Yii::t('app', 'Encryption'), 'fromEmail' => Yii::t('app', 'Sender email'), 'fromName' => Yii::t('app', 'Sender name'), 'notificationEmail' => Yii::t('app', 'Notification recipient'), 'fileTransport' => Yii::t('app', 'Write emails to files'), 'notifyContact' => Yii::t('app', 'Contact notifications'), 'notifyOrder' => Yii::t('app', 'Order notifications'), 'notifyOpportunity' => Yii::t('app', 'Opportunity notifications')];
+        return ['smtpHost' => Yii::t('app', 'SMTP host'), 'smtpPort' => Yii::t('app', 'SMTP port'), 'smtpUsername' => Yii::t('app', 'SMTP username'), 'smtpPassword' => Yii::t('app', 'SMTP password'), 'smtpEncryption' => Yii::t('app', 'Encryption'), 'fromEmail' => Yii::t('app', 'Sender email'), 'fromName' => Yii::t('app', 'Sender name'), 'notificationEmail' => Yii::t('app', 'Notification recipient'), 'fileTransport' => Yii::t('app', 'Write emails to files'), 'notifyContact' => Yii::t('app', 'Contact notifications'), 'notifyOrder' => Yii::t('app', 'Service request notifications'), 'notifyOpportunity' => Yii::t('app', 'Opportunity notifications')];
     }
     public function loadSettings()
     {

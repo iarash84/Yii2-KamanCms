@@ -4,6 +4,9 @@ namespace tests\integration;
 
 use frontend\models\Setting;
 use frontend\models\Contact;
+use frontend\models\HomeSection;
+use frontend\models\Order;
+use frontend\models\Opportunity;
 use frontend\widgets\AdminActionColumn;
 use tests\Support\DatabaseTestCase;
 use Yii;
@@ -88,7 +91,7 @@ class UiCompletenessTest extends DatabaseTestCase
 
         Yii::$app->user->logout(false);
         $homepage = Yii::$app->runAction('site/index');
-        self::assertStringContainsString(Yii::t('app', 'Start a project'), $homepage);
+        self::assertStringContainsString(Yii::t('app', 'Request a service'), $homepage);
         self::assertStringContainsString('home-trust-strip', $homepage);
         Yii::$app->response->clear();
         $order = Yii::$app->runAction('site/order');
@@ -111,6 +114,23 @@ class UiCompletenessTest extends DatabaseTestCase
     public function testGridActionsUseCentralizedAdminColumn(): void
     {
         self::assertInstanceOf(AdminActionColumn::class, Yii::$container->get(\yii\grid\ActionColumn::class));
+
+        $admin = $this->createUser('superAdmin', 'consistent-grid-actions');
+        self::assertTrue(Yii::$app->user->login($admin));
+        self::assertTrue((new Opportunity([
+            'name' => 'Example applicant',
+            'phone_number' => '+98 912 000 0000',
+            'email' => 'applicant@example.test',
+        ]))->save());
+
+        $output = Yii::$app->runAction('admin/opportunity/index');
+        self::assertSame(1, preg_match('/<thead>\s*<tr>(.*?)<\/tr>\s*<\/thead>/s', $output, $matches));
+        $statusPosition = strpos($matches[1], Yii::t('app', 'Status'));
+        $actionsPosition = strpos($matches[1], 'admin-table-actions-column');
+        self::assertNotFalse($statusPosition);
+        self::assertNotFalse($actionsPosition);
+        self::assertLessThan($actionsPosition, $statusPosition);
+        self::assertStringContainsString('<div class="admin-table-actions">', $output);
     }
 
     public function testFrontendEnhancementsPreserveActiveFormAndDialogCancellation(): void
@@ -165,5 +185,37 @@ class UiCompletenessTest extends DatabaseTestCase
 
         $media = Yii::$app->runAction('admin/media/index');
         self::assertStringContainsString('data-image-preview', $media);
+    }
+
+    public function testServiceRequestsFitWithoutAHorizontalTableAndHomepageActionsAreIconOnly(): void
+    {
+        $admin = $this->createUser('superAdmin', 'service-request-admin');
+        self::assertTrue(Yii::$app->user->login($admin));
+        self::assertTrue((new Order([
+            'name' => 'Example customer',
+            'company' => 'Example organization',
+            'phone_number' => '+98 912 000 0000',
+            'email' => 'request@example.test',
+            'website' => 'https://not-shown-in-the-list.example.test',
+            'description' => 'A general service request.',
+        ]))->save());
+
+        $requests = Yii::$app->runAction('admin/order/index');
+        self::assertStringContainsString('service-request-grid', $requests);
+        self::assertStringContainsString('data-label="' . Yii::t('app', 'Contact details') . '"', $requests);
+        self::assertStringNotContainsString('not-shown-in-the-list.example.test', $requests);
+
+        self::assertTrue((new HomeSection([
+            'type' => 'content',
+            'title' => 'Icon action section',
+            'status' => 1,
+        ]))->save());
+        $sections = Yii::$app->runAction('admin/home-section/index');
+        foreach (['update', 'delete'] as $action) {
+            self::assertMatchesRegularExpression(
+                '/<a[^>]+href="[^"]*home-section\\/' . $action . '[^"]*"[^>]+aria-label="[^"]+"[^>]*>\\s*<svg/s',
+                $sections
+            );
+        }
     }
 }

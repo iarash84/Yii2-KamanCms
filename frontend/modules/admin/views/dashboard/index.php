@@ -8,7 +8,7 @@ $cards = [
     ['posts', 'posts', Yii::t('app', 'Blog'), ['/admin/blog/index']],
     ['briefcase', 'samples', Yii::t('app', 'Sample Project'), ['/admin/sample/index']],
     ['inbox', 'contacts', Yii::t('app', 'Contact'), ['/admin/contact/index']],
-    ['posts', 'orders', Yii::t('app', 'Order app'), ['/admin/order/index']],
+    ['posts', 'orders', Yii::t('app', 'Service requests'), ['/admin/order/index']],
     ['users', 'opportunities', Yii::t('app', 'Job opportunity'), ['/admin/opportunity/index']],
     ['pages', 'pages', Yii::t('app', 'Dynamic pages'), ['/admin/page/index']],
     ['image', 'media', Yii::t('app', 'Media library'), ['/admin/media/index']],

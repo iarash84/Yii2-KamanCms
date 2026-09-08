@@ -8,11 +8,11 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use frontend\components\TextCaptcha;
 
-$this->title = Yii::t('app','Order app');;
+$this->title = Yii::t('app', 'Service request');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-order public-form-card">
-    <header class="public-form-header"><p class="text-overline"><?= Yii::t('app', 'Project inquiry') ?></p><h1><?= Html::encode($this->title) ?></h1><p><?= Yii::t('app', 'Share the goal, current situation and constraints. You do not need a finished specification.') ?></p></header>
+    <header class="public-form-header"><p class="text-overline"><?= Yii::t('app', 'Tell us what you need') ?></p><h1><?= Html::encode($this->title) ?></h1><p><?= Yii::t('app', 'Describe the service you need, your current situation and any constraints. You do not need a complete brief.') ?></p></header>
 
             <?= $this->render('_submission_expectation') ?>
 
@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
 
                 <div class="form-group">
-                    <?= Html::submitButton(Yii::t('app', 'Send project brief'), ['class' => 'd-btn d-btn-primary', 'name' => 'order-button']) ?>
+                    <?= Html::submitButton(Yii::t('app', 'Submit service request'), ['class' => 'd-btn d-btn-primary', 'name' => 'order-button']) ?>
                 </div>
 
             <?php ActiveForm::end(); ?>

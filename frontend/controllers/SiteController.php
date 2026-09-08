@@ -152,7 +152,7 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->saveOrder()) {
                 NotificationService::formSubmitted('order', $model->attributes);
-                Yii::$app->session->setFlash('success', Yii::t('app','Thank you for your order. We will respond to you as soon as possible.'));
+                Yii::$app->session->setFlash('success', Yii::t('app', 'Thank you for your request. We will respond to you as soon as possible.'));
             } else {
                 Yii::$app->session->setFlash('error', Yii::t('app','There was an error when adding your contact.'));
             }

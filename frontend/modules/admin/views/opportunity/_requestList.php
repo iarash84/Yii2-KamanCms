@@ -21,17 +21,6 @@ use yii\helpers\Html;
                 'contentOptions' => ['style'=>'text-align:center;'],
             ],
             [
-                'label' => Yii::t('app', 'Status'),
-                'format' => 'raw',
-                'value' => static function ($model) {
-                    $unread = $model->read_at === null;
-                    $label = $unread ? Yii::t('app', 'Unread') : Yii::t('app', 'Read');
-                    return Html::tag('span', $label, [
-                        'class' => 'submission-status ' . ($unread ? 'is-unread' : 'is-read'),
-                    ]);
-                },
-            ],
-            [
                 'class' => 'yii\grid\DataColumn',
                 'headerOptions' => ['style'=>'text-align:center;'],
                 'contentOptions' => ['style'=>'text-align:center;'],
@@ -56,6 +45,17 @@ use yii\helpers\Html;
                 'contentOptions' => ['style'=>'text-align:center;'],
                 'attribute' => 'created_at',
                 'format' => 'datetime',
+            ],
+            [
+                'label' => Yii::t('app', 'Status'),
+                'format' => 'raw',
+                'value' => static function ($model) {
+                    $unread = $model->read_at === null;
+                    $label = $unread ? Yii::t('app', 'Unread') : Yii::t('app', 'Read');
+                    return Html::tag('span', $label, [
+                        'class' => 'submission-status ' . ($unread ? 'is-unread' : 'is-read'),
+                    ]);
+                },
             ],
             [
                 'class' => AdminActionColumn::class,

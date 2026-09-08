@@ -39,3 +39,4 @@ phpunit.phar
 /.env.installing
 /.env.installer-backup
 /.phpunit.cache/
+docs/product-review.md

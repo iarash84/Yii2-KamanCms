@@ -57,7 +57,7 @@ class OrderForm extends Model
             'email' => Yii::t('app', 'Email'),
             'phoneNumber' => Yii::t('app', 'Phone Number'),
             'website' => Yii::t('app', 'Website'),
-            'description' => Yii::t('app', 'Description project'),
+            'description' => Yii::t('app', 'Request details'),
             'verifyCode' => Yii::t('app', 'Verify Code'),
         ];
     }

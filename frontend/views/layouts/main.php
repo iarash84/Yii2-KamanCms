@@ -42,7 +42,7 @@ $canViewSubmissions = !Yii::$app->user->isGuest && Yii::$app->user->can('viewSub
 if ($canViewSubmissions) {
     $submissionNotifications = [
         ['count' => Contact::find()->where(['read_at' => null])->count(), 'label' => Yii::t('app', 'Contact'), 'url' => ['/admin/contact/index']],
-        ['count' => Order::find()->where(['read_at' => null])->count(), 'label' => Yii::t('app', 'Order app'), 'url' => ['/admin/order/index']],
+        ['count' => Order::find()->where(['read_at' => null])->count(), 'label' => Yii::t('app', 'Service requests'), 'url' => ['/admin/order/index']],
         ['count' => Opportunity::find()->where(['read_at' => null])->count(), 'label' => Yii::t('app', 'Job opportunity'), 'url' => ['/admin/opportunity/index']],
     ];
 }
@@ -119,11 +119,11 @@ $this->registerLinkTag([
                             <li><?= Html::a(Yii::t('app', 'Sample Project'), ['/site/sample'], ['aria-current' => $current('site/sample')]) ?></li>
                             <li><?= Html::a(Yii::t('app', 'About'), ['/site/about'], ['aria-current' => $current('site/about')]) ?></li>
                             <li><?= Html::a(Yii::t('app', 'Contact'), ['/site/contact'], ['aria-current' => $current('site/contact')]) ?></li>
-                            <li><?= Html::a(Yii::t('app', 'Order app'), ['/site/order'], ['class' => 'd-btn d-btn-primary d-btn-sm']) ?></li>
+                            <li><?= Html::a(Yii::t('app', 'Request a service'), ['/site/order'], ['class' => 'd-btn d-btn-primary d-btn-sm']) ?></li>
                         <?php endif; ?>
                     <?php endif; ?>
                     <?php if (!$isAdmin): ?>
-                        <li class="header-primary-action"><?= Html::a(Yii::t('app', 'Start a project'), ['/site/order'], ['class' => 'd-btn d-btn-primary d-btn-sm']) ?></li>
+                        <li class="header-primary-action"><?= Html::a(Yii::t('app', 'Request a service'), ['/site/order'], ['class' => 'd-btn d-btn-primary d-btn-sm']) ?></li>
                         <li class="header-icon-action"><?= Html::a(Icon::show('search') . Html::tag('span', Yii::t('app', 'Search'), ['class' => 'sr-only']), ['/search/index'], ['aria-label' => Yii::t('app', 'Search')]) ?></li>
                     <?php endif; ?>
                     <?php if (!$isAdmin): ?><li><?= $this->render('_appearance', ['inSidebar' => false]) ?></li><?php endif; ?>
@@ -191,7 +191,7 @@ $this->registerLinkTag([
                         <?php if (Yii::$app->user->can('viewSubmissions')): ?>
                             <li class="admin-nav-label"><?= Yii::t('app', 'Requests') ?></li>
                             <li><?= Html::a(Icon::show('inbox') . Yii::t('app', 'Contact'), ['/admin/contact/index'], ['aria-current' => $current('admin/contact')]) ?></li>
-                            <li><?= Html::a(Icon::show('briefcase') . Yii::t('app', 'Order app'), ['/admin/order/index'], ['aria-current' => $current('admin/order')]) ?></li>
+                            <li><?= Html::a(Icon::show('briefcase') . Yii::t('app', 'Service requests'), ['/admin/order/index'], ['aria-current' => $current('admin/order')]) ?></li>
                             <li><?= Html::a(Icon::show('users') . Yii::t('app', 'Job opportunity'), ['/admin/opportunity/index'], ['aria-current' => $current('admin/opportunity')]) ?></li>
                         <?php endif; ?>
                         <?php if (Yii::$app->user->can('manageSettings') || Yii::$app->user->can('manageSystem')): ?>
@@ -259,7 +259,7 @@ $this->registerLinkTag([
                             <li><?= Html::a(Yii::t('app', 'Contact'), ['/site/contact']) ?></li>
                             <li><?= Html::a(Yii::t('app', 'Blog'), ['/blog/index']) ?></li>
                             <li><?= Html::a(Yii::t('app', 'FAQS'), ['/site/faqs']) ?></li>
-                            <li><?= Html::a(Yii::t('app', 'Order app'), ['/site/order']) ?></li>
+                            <li><?= Html::a(Yii::t('app', 'Service request'), ['/site/order']) ?></li>
                             <li><?= Html::a(Yii::t('app', 'Job opportunity'), ['/site/opportunity']) ?></li>
                         <?php endif; ?>
                     </ul>
