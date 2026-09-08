@@ -2,6 +2,7 @@
 
 namespace frontend\modules\admin\controllers;
 
+use common\components\SecureUpload;
 use common\models\Log;
 use frontend\models\ChangePasswordForm;
 use frontend\models\SignupForm;
@@ -12,6 +13,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
+use yii\web\UploadedFile;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -41,6 +43,7 @@ class UserController extends Controller
 
             $model = new SignupForm();
             if ($model->load(Yii::$app->request->post())) {
+                $model->avatarFile = UploadedFile::getInstance($model, 'avatarFile');
                 if ($user = $model->signup()) {
                     return $this->redirect(['/admin/users']);
                 }
@@ -63,12 +66,18 @@ class UserController extends Controller
     public function actionUpdate($id)
     {
             $model = $this->findModel($id);
+            $oldAvatar = $model->avatar;
 
-            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($model->load(Yii::$app->request->post())) {
+                $model->avatarFile = UploadedFile::getInstance($model, 'avatarFile');
+
+                if (!$model->validate()) {
+                    return $this->render('update', ['model' => $model]);
+                }
 
                 $this->guardLastSuperAdmin($model->id, $model->role);
 
-                if(!empty($model->password)){
+                if (!empty($model->password)) {
                     $model->setPassword($model->password);
                     $model->generateAuthKey();
                 }
@@ -77,10 +86,27 @@ class UserController extends Controller
                 $role = $auth->getRole($model->role);
                 if ($role === null) {
                     $model->addError('role', Yii::t('app', 'Invalid role.'));
-                } elseif ($model->save()) {
-                    $auth->revokeAll($model->id);
-                    $auth->assign($role, $model->id);
-                    return $this->redirect(['index']);
+                } else {
+                    $newAvatar = null;
+                    if ($model->avatarFile !== null) {
+                        $newAvatar = SecureUpload::storeAvatar($model->avatarFile);
+                        $model->avatar = $newAvatar;
+                    } elseif ($model->removeAvatar) {
+                        $model->avatar = null;
+                    }
+
+                    if ($model->save(false)) {
+                        if (($newAvatar !== null || $model->removeAvatar) && $oldAvatar !== $model->avatar) {
+                            SecureUpload::deleteAvatar($oldAvatar);
+                        }
+                        $auth->revokeAll($model->id);
+                        $auth->assign($role, $model->id);
+                        return $this->redirect(['index']);
+                    }
+                    if ($newAvatar !== null) {
+                        SecureUpload::deleteAvatar($newAvatar);
+                        $model->avatar = $oldAvatar;
+                    }
                 }
             }
 
@@ -140,7 +166,9 @@ class UserController extends Controller
             $model = $this->findModel($id);
             $this->guardLastSuperAdmin($model->id, null);
             Yii::$app->authManager->revokeAll($model->id);
+            $avatar = $model->avatar;
             $model->delete();
+            SecureUpload::deleteAvatar($avatar);
 
             return $this->redirect(['index']);
     }

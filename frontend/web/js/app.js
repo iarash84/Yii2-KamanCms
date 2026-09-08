@@ -88,6 +88,15 @@
         document.addEventListener('keydown', function (event) { if (event.key === 'Escape') setSidebar(false); });
     }
 
+    document.querySelectorAll('[data-admin-nav-group]').forEach(function (group) {
+        group.addEventListener('toggle', function () {
+            if (!group.open) return;
+            document.querySelectorAll('[data-admin-nav-group][open]').forEach(function (otherGroup) {
+                if (otherGroup !== group) otherGroup.open = false;
+            });
+        });
+    });
+
     document.querySelectorAll('.admin-content form .form-control, .admin-content form input, .admin-content form select, .admin-content form textarea').forEach(function (field) {
         if (field.type === 'hidden' || field.type === 'submit') return;
         if (field.type === 'checkbox') field.classList.add('d-toggle', 'd-toggle-sm');
@@ -102,6 +111,20 @@
         if (button.classList.contains('btn-danger')) button.classList.add('d-btn-error');
         else if (button.classList.contains('btn-secondary')) button.classList.add('d-btn-outline');
         else button.classList.add('d-btn-primary');
+    });
+
+    document.querySelectorAll('[data-avatar-input]').forEach(function (input) {
+        input.addEventListener('change', function () {
+            const file = input.files && input.files[0];
+            const preview = input.closest('.user-avatar-panel')?.querySelector('[data-avatar-preview]');
+            if (!file || !preview || !file.type.startsWith('image/')) return;
+            const image = document.createElement('img');
+            const objectUrl = URL.createObjectURL(file);
+            image.alt = '';
+            image.src = objectUrl;
+            image.addEventListener('load', function () { URL.revokeObjectURL(objectUrl); }, {once: true});
+            preview.replaceChildren(image);
+        });
     });
 
     const confirmationDialog = document.querySelector('[data-confirmation-dialog]');
@@ -262,6 +285,14 @@
         let layout = JSON.parse(dashboard.dataset.layout || '{"order":[],"hidden":[]}');
         const picker = document.querySelector('[data-dashboard-picker]');
         const widgets = Array.from(dashboard.querySelectorAll('[data-widget]'));
+        const savedHiddenWidgets = layout.hidden || [];
+        let recoveredEmptyDashboard = false;
+        if (widgets.length > 0 && widgets.every(function (widget) {
+            return savedHiddenWidgets.includes(widget.dataset.widget);
+        })) {
+            layout.hidden = [];
+            recoveredEmptyDashboard = true;
+        }
         const save = function () {
             layout.order = Array.from(dashboard.querySelectorAll('[data-widget]')).map(el => el.dataset.widget);
             layout.hidden = widgets.filter(el => el.hidden).map(el => el.dataset.widget);
@@ -271,7 +302,44 @@
             fetch(dashboard.dataset.saveUrl, {method: 'POST', headers: {'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'}, body: body.toString()});
         };
         layout.order.forEach(id => { const el=dashboard.querySelector('[data-widget="'+id+'"]'); if(el) dashboard.appendChild(el); });
-        widgets.forEach(el => { el.hidden=(layout.hidden || []).includes(el.dataset.widget); el.classList.toggle('is-collapsed', (layout.collapsed || []).includes(el.dataset.widget)); const collapse=document.createElement('button'); collapse.type='button'; collapse.className='d-btn d-btn-sm d-btn-square d-btn-ghost dashboard-widget-toggle'; collapse.innerHTML='<span aria-hidden="true">−</span>'; const updateCollapseLabel=()=>collapse.setAttribute('aria-label',el.classList.contains('is-collapsed')?dashboard.dataset.expandLabel:dashboard.dataset.collapseLabel); updateCollapseLabel(); collapse.addEventListener('click',()=>{el.classList.toggle('is-collapsed'); updateCollapseLabel(); save();}); el.prepend(collapse); const label=document.createElement('label'); const input=document.createElement('input'); input.type='checkbox'; input.className='d-toggle d-toggle-sm'; input.checked=!el.hidden; input.addEventListener('change',()=>{el.hidden=!input.checked; save();}); label.append(input, document.createTextNode(' '+el.dataset.title)); picker.appendChild(label); el.addEventListener('dragstart',()=>el.classList.add('is-dragging')); el.addEventListener('dragend',()=>{el.classList.remove('is-dragging'); save();}); });
+        widgets.forEach(function (el) {
+            el.hidden = (layout.hidden || []).includes(el.dataset.widget);
+            el.classList.toggle('is-collapsed', (layout.collapsed || []).includes(el.dataset.widget));
+
+            const toolbar = document.createElement('div');
+            toolbar.className = 'dashboard-widget-toolbar';
+            const title = document.createElement('strong');
+            title.textContent = el.dataset.title;
+            const collapse = document.createElement('button');
+            collapse.type = 'button';
+            collapse.className = 'd-btn d-btn-sm d-btn-square d-btn-ghost dashboard-widget-toggle';
+            collapse.innerHTML = '<svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>';
+            const updateCollapse = function () {
+                const collapsed = el.classList.contains('is-collapsed');
+                collapse.setAttribute('aria-label', collapsed ? dashboard.dataset.expandLabel : dashboard.dataset.collapseLabel);
+                collapse.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+            };
+            updateCollapse();
+            collapse.addEventListener('click', function () {
+                el.classList.toggle('is-collapsed');
+                updateCollapse();
+                save();
+            });
+            toolbar.append(title, collapse);
+            el.prepend(toolbar);
+
+            const label = document.createElement('label');
+            const input = document.createElement('input');
+            input.type = 'checkbox';
+            input.className = 'd-toggle d-toggle-sm';
+            input.checked = !el.hidden;
+            input.addEventListener('change', function () { el.hidden = !input.checked; save(); });
+            label.append(input, document.createTextNode(' ' + el.dataset.title));
+            picker.appendChild(label);
+            el.addEventListener('dragstart', function () { el.classList.add('is-dragging'); });
+            el.addEventListener('dragend', function () { el.classList.remove('is-dragging'); save(); });
+        });
+        if (recoveredEmptyDashboard) save();
         dashboard.addEventListener('dragover', event => { event.preventDefault(); const moving=dashboard.querySelector('.is-dragging'); const target=event.target.closest('[data-widget]'); if(moving && target && moving!==target) dashboard.insertBefore(moving, target); });
         dashboard.querySelectorAll('[data-quick-link]').forEach(function (input) {
             input.addEventListener('change', function () {

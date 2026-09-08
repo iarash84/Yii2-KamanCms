@@ -20,4 +20,13 @@ class DashboardPreferenceTest extends TestCase
         self::assertSame(['analytics'], $layout['collapsed']);
         self::assertSame(['media', 'users'], $layout['quick_links']);
     }
+
+    public function testAllWidgetsCannotBePersistedAsHidden(): void
+    {
+        $layout = DashboardPreference::normalize([
+            'hidden' => DashboardPreference::WIDGETS,
+        ]);
+
+        self::assertSame([], $layout['hidden']);
+    }
 }

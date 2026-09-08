@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\grid\GridView;
 use frontend\widgets\AdminActionColumn;
 
@@ -26,15 +27,33 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'class' => 'yii\grid\DataColumn',
+                'label' => Yii::t('app', 'User'),
+                'format' => 'raw',
                 'headerOptions' => ['style'=>'text-align:center;'],
                 'contentOptions' => ['style'=>'text-align:center;'],
-                'attribute' => 'username'
+                'value' => static function ($data) {
+                    $name = trim((string) $data->full_name) ?: $data->username;
+                    $avatar = trim((string) $data->avatar) !== ''
+                        ? Html::img(Url::to('@web/' . ltrim($data->avatar, '/')), ['alt' => ''])
+                        : Html::tag('span', Html::encode(mb_strtoupper(mb_substr($name, 0, 1))));
+                    return Html::tag(
+                        'div',
+                        Html::tag('span', $avatar, ['class' => 'user-list-avatar'])
+                        . Html::tag('span', Html::tag('strong', Html::encode($name))
+                            . Html::tag('small', Html::encode('@' . $data->username))),
+                        ['class' => 'user-list-identity']
+                    );
+                },
             ],
             [
                 'class' => 'yii\grid\DataColumn',
                 'headerOptions' => ['style'=>'text-align:center;'],
                 'contentOptions' => ['style'=>'text-align:center;'],
                 'attribute' => 'email'
+            ],
+            [
+                'attribute' => 'job_title',
+                'value' => static fn ($data) => $data->job_title ?: Yii::t('app', 'Not provided'),
             ],
             [
                 'class' => 'yii\grid\DataColumn',

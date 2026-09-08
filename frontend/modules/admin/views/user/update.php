@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\models\User */
 
-$this->title = Yii::t('app', 'Update') . ' ' . $model->username;
+$this->title = Yii::t('app', 'Update') . ' ' . ($model->full_name ?: $model->username);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'User Management'), 'url' => ['index']];
 
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');

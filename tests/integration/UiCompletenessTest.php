@@ -110,6 +110,8 @@ class UiCompletenessTest extends DatabaseTestCase
         self::assertStringContainsString('admin-sidebar-header', $output);
         self::assertStringContainsString('data-admin-sidebar-toggle', $output);
         self::assertStringContainsString('data-admin-sidebar', $output);
+        self::assertStringContainsString('data-admin-nav-group', $output);
+        self::assertStringContainsString('admin-nav-submenu', $output);
         self::assertStringContainsString('data-confirmation-dialog', $output);
         self::assertStringContainsString('d-modal', $output);
     }
@@ -188,6 +190,36 @@ class UiCompletenessTest extends DatabaseTestCase
 
         $media = Yii::$app->runAction('admin/media/index');
         self::assertStringContainsString('data-image-preview', $media);
+    }
+
+    public function testDashboardControlsAndCompleteUserProfileEditorAreRendered(): void
+    {
+        $admin = $this->createUser('superAdmin', 'profile-ui-admin');
+        self::assertTrue(Yii::$app->user->login($admin));
+
+        $dashboard = Yii::$app->runAction('admin/dashboard/index');
+        self::assertStringContainsString('data-collapse-label', $dashboard);
+        $javascript = file_get_contents(Yii::getAlias('@webroot/js/app.js'));
+        self::assertStringContainsString("toolbar.className = 'dashboard-widget-toolbar'", $javascript);
+        self::assertStringContainsString("collapse.setAttribute('aria-expanded'", $javascript);
+        self::assertStringContainsString('widgets.every(function (widget)', $javascript);
+        $styles = file_get_contents(Yii::getAlias('@webroot/css/design-system.css'));
+        self::assertStringNotContainsString(
+            '.dashboard-widget.is-collapsed > :not(.dashboard-widget-toggle)',
+            $styles
+        );
+        self::assertStringContainsString(
+            '.dashboard-widget.is-collapsed > :not(.dashboard-widget-toolbar)',
+            $styles
+        );
+
+        Yii::$app->response->clear();
+        $users = Yii::$app->runAction('admin/user/index');
+        foreach (['full_name', 'avatarFile', 'job_title', 'phone', 'location', 'website', 'bio'] as $attribute) {
+            self::assertStringContainsString($attribute, $users);
+        }
+        self::assertStringContainsString('multipart/form-data', $users);
+        self::assertStringContainsString('user-profile-editor', $users);
     }
 
     public function testServiceRequestsFitWithoutAHorizontalTableAndHomepageActionsAreIconOnly(): void

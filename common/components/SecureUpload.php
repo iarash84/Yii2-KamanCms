@@ -20,6 +20,30 @@ class SecureUpload
         return $relative;
     }
 
+    public static function storeAvatar(UploadedFile $file)
+    {
+        self::validate($file, ['png', 'jpg', 'jpeg', 'webp'], [
+            'image/png', 'image/jpeg', 'image/webp',
+        ], 2 * 1024 * 1024);
+        $relative = 'upload/avatar/' . Yii::$app->security->generateRandomString(32)
+            . '.' . strtolower($file->extension);
+        self::save($file, Yii::getAlias('@webroot/' . $relative));
+        return $relative;
+    }
+
+    public static function deleteAvatar($relativePath)
+    {
+        $relativePath = str_replace('\\', '/', (string) $relativePath);
+        if (!preg_match('#^upload/avatar/[A-Za-z0-9_-]{32}\.(?:png|jpe?g|webp)$#i', $relativePath)) {
+            return;
+        }
+
+        $path = Yii::getAlias('@webroot/' . $relativePath);
+        if (is_file($path)) {
+            unlink($path);
+        }
+    }
+
     public static function storeResume(UploadedFile $file)
     {
         self::validate($file, ['pdf'], ['application/pdf'], 5 * 1024 * 1024);

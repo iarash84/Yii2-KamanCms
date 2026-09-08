@@ -28,6 +28,19 @@ class UploadSecurityTest extends TestCase
         SecureUpload::storeImage($file);
     }
 
+    public function testAvatarUsesAnIsolatedGeneratedPathAndCanBeDeleted(): void
+    {
+        $temp = $this->tempFile(base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII='));
+        $file = $this->uploadedFile('personal-name.png', $temp, 'image/png');
+        $relative = SecureUpload::storeAvatar($file);
+        $path = Yii::getAlias('@webroot/' . $relative);
+        self::assertStringStartsWith('upload/avatar/', $relative);
+        self::assertStringNotContainsString('personal-name', $relative);
+        self::assertFileExists($path);
+        SecureUpload::deleteAvatar($relative);
+        self::assertFileDoesNotExist($path);
+    }
+
     public function testPdfResumeIsStoredOutsideWebRoot(): void
     {
         $temp = $this->tempFile("%PDF-1.4\n1 0 obj\n<<>>\nendobj\n%%EOF");

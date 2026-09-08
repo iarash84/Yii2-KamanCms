@@ -4,6 +4,7 @@ namespace tests\integration;
 
 use common\widgets\Alert;
 use frontend\models\Faqs;
+use frontend\models\SignupForm;
 use frontend\models\SystemSetting;
 use tests\Support\DatabaseTestCase;
 use Yii;
@@ -64,11 +65,49 @@ class AdminFormSubmissionTest extends DatabaseTestCase
         $user = $this->createUser('editor', 'old-username');
         self::assertTrue($user->load(['User' => [
             'username' => 'new-username',
+            'full_name' => 'Example Editor',
             'email' => 'new@example.test',
+            'job_title' => 'Content editor',
+            'phone' => '+98 912 000 0000',
+            'location' => 'Tehran',
+            'website' => 'https://example.test',
+            'bio' => 'Creates and reviews editorial content.',
             'role' => 'editor',
         ]]));
         self::assertTrue($user->validate(), json_encode($user->errors));
         self::assertSame('new-username', $user->username);
+        self::assertSame('Example Editor', $user->full_name);
         self::assertSame('new@example.test', $user->email);
+        self::assertSame('Content editor', $user->job_title);
+        self::assertSame('+989120000000', $user->phone);
+        self::assertSame('Tehran', $user->location);
+        self::assertSame('https://example.test', $user->website);
+        self::assertSame('Creates and reviews editorial content.', $user->bio);
+    }
+
+    public function testCompleteProfileIsPersistedWhenAnAdministratorCreatesAUser(): void
+    {
+        $form = new SignupForm([
+            'username' => 'new-profile-user',
+            'full_name' => 'New Profile User',
+            'email' => 'new-profile-user@example.test',
+            'password' => 'ValidPassword!2026',
+            'role' => 'editor',
+            'job_title' => 'Writer',
+            'phone' => '+1 202 555 0147',
+            'location' => 'Remote',
+            'website' => 'https://example.test/profile',
+            'bio' => 'Writes product documentation.',
+        ]);
+
+        $user = $form->signup();
+        self::assertNotNull($user, json_encode($form->errors));
+        self::assertSame('New Profile User', $user->full_name);
+        self::assertSame('Writer', $user->job_title);
+        self::assertSame('+12025550147', $user->phone);
+        self::assertSame('Remote', $user->location);
+        self::assertSame('https://example.test/profile', $user->website);
+        self::assertSame('Writes product documentation.', $user->bio);
+        self::assertArrayHasKey('editor', Yii::$app->authManager->getRolesByUser($user->id));
     }
 }
