@@ -78,7 +78,7 @@ $this->registerLinkTag([
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
-<body>
+<body class="<?= $isAdmin ? 'admin-interface' : 'public-interface' ?>">
 <?php $this->beginBody() ?>
 <div class="site-shell">
     <a class="skip-link" href="#main-content"><?= Yii::t('app', 'Skip to main content') ?></a>
@@ -162,7 +162,13 @@ $this->registerLinkTag([
             <?php if ($isAdmin): ?>
                 <button class="d-btn d-btn-square d-btn-ghost admin-sidebar-toggle" type="button" data-admin-sidebar-toggle aria-controls="admin-sidebar" aria-expanded="false" aria-label="<?= Yii::t('app', 'Open admin navigation') ?>"><?= Icon::show('menu') ?></button>
                 <aside id="admin-sidebar" class="admin-sidebar card" data-admin-sidebar aria-label="<?= Yii::t('app', 'Admin panel') ?>">
-                    <h2><?= Yii::t('app', 'Admin panel') ?></h2>
+                    <div class="admin-sidebar-header">
+                        <span class="admin-sidebar-mark" aria-hidden="true"><?= Html::encode($brandInitial) ?></span>
+                        <div>
+                            <span class="admin-sidebar-context"><?= Html::encode($siteName) ?></span>
+                            <h2><?= Yii::t('app', 'Admin panel') ?></h2>
+                        </div>
+                    </div>
                     <ul class="admin-nav">
                         <li><?= Html::a(Icon::show('dashboard') . Yii::t('app', 'Dashboard'), ['/admin'], ['aria-current' => $current('admin/dashboard')]) ?></li>
                         <?php if (Yii::$app->user->can('manageContent') || Yii::$app->user->can('manageMenus') || Yii::$app->user->can('managePages') || Yii::$app->user->can('manageMedia')): ?>

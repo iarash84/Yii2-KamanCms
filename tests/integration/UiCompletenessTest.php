@@ -78,6 +78,7 @@ class UiCompletenessTest extends DatabaseTestCase
     {
         Yii::$app->user->logout(false);
         $output = Yii::$app->runAction('site/index');
+        self::assertStringContainsString('<body class="public-interface">', $output);
         self::assertStringContainsString('data-theme-option', $output);
         foreach (['system', 'site-light', 'site-dark'] as $theme) {
             self::assertStringContainsString('data-theme-option="' . $theme . '"', $output);
@@ -105,6 +106,8 @@ class UiCompletenessTest extends DatabaseTestCase
         $admin = $this->createUser('superAdmin', 'admin-ui-shell');
         self::assertTrue(Yii::$app->user->login($admin));
         $output = Yii::$app->runAction('admin/dashboard/index');
+        self::assertStringContainsString('<body class="admin-interface">', $output);
+        self::assertStringContainsString('admin-sidebar-header', $output);
         self::assertStringContainsString('data-admin-sidebar-toggle', $output);
         self::assertStringContainsString('data-admin-sidebar', $output);
         self::assertStringContainsString('data-confirmation-dialog', $output);
