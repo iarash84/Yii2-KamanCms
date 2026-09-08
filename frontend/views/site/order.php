@@ -12,21 +12,23 @@ $this->title = Yii::t('app','Order app');;
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-order public-form-card">
-    <header class="public-form-header"><h1><?= Html::encode($this->title) ?></h1></header>
+    <header class="public-form-header"><p class="text-overline"><?= Yii::t('app', 'Project inquiry') ?></p><h1><?= Html::encode($this->title) ?></h1><p><?= Yii::t('app', 'Share the goal, current situation and constraints. You do not need a finished specification.') ?></p></header>
 
-            <?php $form = ActiveForm::begin(['id' => 'contact-form']); ?>
+            <?= $this->render('_submission_expectation') ?>
 
-                <?= $form->field($model, 'name')->textInput(['autofocus' => true]) ?>
+            <?php $form = ActiveForm::begin(['id' => 'order-form']); ?>
 
-                <?= $form->field($model, 'phoneNumber') ?>
+                <?= $form->field($model, 'name')->textInput(['autofocus' => true, 'autocomplete' => 'name']) ?>
 
-                <?= $form->field($model, 'company') ?>
+                <?= $form->field($model, 'phoneNumber')->input('tel', ['autocomplete' => 'tel', 'inputmode' => 'tel', 'dir' => 'ltr', 'placeholder' => '+98 912 000 0000']) ?>
 
-                <?= $form->field($model, 'website') ?>
+                <?= $form->field($model, 'company')->textInput(['autocomplete' => 'organization']) ?>
 
-                <?= $form->field($model, 'email') ?>
+                <?= $form->field($model, 'website')->input('url', ['autocomplete' => 'url', 'dir' => 'ltr', 'placeholder' => 'https://example.com']) ?>
 
-                <?= $form->field($model, 'description')->textArea(['rows' => 6]) ?>
+                <?= $form->field($model, 'email')->input('email', ['autocomplete' => 'email', 'dir' => 'ltr']) ?>
+
+                <?= $form->field($model, 'description')->textArea(['rows' => 6, 'placeholder' => Yii::t('app', 'What outcome do you need, and what is getting in the way today?')]) ?>
 
                 <div class="captcha-panel">
                     <p id="captcha-question" class="captcha-question"><?= Html::encode(TextCaptcha::question()) ?></p>
@@ -38,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
 
                 <div class="form-group">
-                    <?= Html::submitButton(Yii::t('app', 'Send'), ['class' => 'd-btn d-btn-primary', 'name' => 'contact-button']) ?>
+                    <?= Html::submitButton(Yii::t('app', 'Send project brief'), ['class' => 'd-btn d-btn-primary', 'name' => 'order-button']) ?>
                 </div>
 
             <?php ActiveForm::end(); ?>

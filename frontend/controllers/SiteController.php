@@ -1,8 +1,10 @@
 <?php
 namespace frontend\controllers;
 
+use frontend\models\Blog;
+use frontend\models\Carousel;
 use frontend\models\Faqs;
-
+use frontend\models\HomeSection;
 use frontend\models\Opportunity;
 use frontend\models\OpportunityForm;
 use frontend\models\OrderForm;
@@ -74,7 +76,34 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $homepageSettings = Setting::find()->with('translations')
+            ->where(['type' => ['CompanyName', 'Home']])->indexBy('type')->all();
+        $siteTitle = isset($homepageSettings['CompanyName'])
+            ? trim((string) $homepageSettings['CompanyName']->getLocalizedContent())
+            : '';
+        $homeContent = isset($homepageSettings['Home'])
+            ? trim((string) $homepageSettings['Home']->getLocalizedContent())
+            : '';
+
+        return $this->render('index', [
+            'siteTitle' => $siteTitle !== '' ? $siteTitle : Yii::t('app', 'Website'),
+            'homeContent' => $homeContent,
+            'slides' => Carousel::find()->with('translations')->where(['status' => 1])
+                ->orderBy(['sort_order' => SORT_ASC, 'id' => SORT_ASC])->all(),
+            'sections' => HomeSection::find()->with('translations')->where(['status' => 1])
+                ->orderBy(['sort_order' => SORT_ASC, 'id' => SORT_ASC])->all(),
+            'portfolioItems' => Sample::find()->with('translations')
+                ->orderBy(['created_at' => SORT_DESC, 'id' => SORT_DESC])->limit(3)->all(),
+            'posts' => Blog::find()->with('translations')
+                ->orderBy(['created_at' => SORT_DESC, 'id' => SORT_DESC])->limit(3)->all(),
+            'faqs' => Faqs::find()->with('translations')->where(['status' => 1])
+                ->orderBy(['sort_order' => SORT_ASC, 'id' => SORT_ASC])->limit(4)->all(),
+            'stats' => [
+                'projects' => (int) Sample::find()->count(),
+                'articles' => (int) Blog::find()->count(),
+                'answers' => (int) Faqs::find()->where(['status' => 1])->count(),
+            ],
+        ]);
     }
 
     /**

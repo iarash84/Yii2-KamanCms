@@ -26,6 +26,13 @@ use Yii;
  */
 class Carousel extends \yii\db\ActiveRecord
 {
+    use traits\TranslatableContent;
+
+    public function translatedAttributes()
+    {
+        return ['title', 'text', 'eyebrow', 'primary_button_label', 'secondary_button_label'];
+    }
+
     /**
      * @inheritdoc
      */

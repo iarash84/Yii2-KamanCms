@@ -4,6 +4,7 @@ namespace frontend\models;
 
 
 
+use common\validators\PhoneNumberValidator;
 use Yii;
 use yii\base\Model;
 
@@ -28,15 +29,20 @@ class OrderForm extends Model
         return [
             // name, email, subject and body are required
             [['name', 'email', 'description','phoneNumber'], 'required'],
-            [['website'], 'string', 'max' => 255],
-            [['company'] , 'string', 'max' => 255 ],
+            [['name', 'email', 'company', 'phoneNumber', 'website'], 'filter', 'filter' => 'trim'],
+            [['name', 'company'], 'string', 'max' => 255],
+            [['description'], 'string', 'max' => 5000],
+            [['website'], 'filter', 'filter' => static function ($value) {
+                $value = trim((string) $value);
+                return $value !== '' && !preg_match('~^https?://~i', $value) ? 'https://' . $value : $value;
+            }],
+            [['website'], 'url', 'validSchemes' => ['http', 'https'], 'defaultScheme' => 'https', 'skipOnEmpty' => true],
+            [['website', 'email'], 'string', 'max' => 255],
             // email has to be a valid email address
             ['email', 'email'],
-            ['email', 'filter', 'filter' => 'trim'],
             // verifyCode needs to be entered correctly
             ['verifyCode', \common\validators\TextCaptchaValidator::class],
-            ['phoneNumber', 'integer', 'integerOnly'=>true, 'min'=>10],
-            ['phoneNumber', 'filter', 'filter' => 'trim'],
+            ['phoneNumber', PhoneNumberValidator::class],
         ];
     }
 

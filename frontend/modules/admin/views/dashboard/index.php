@@ -68,17 +68,25 @@ $selectedQuickLinks = $dashboardLayout['quick_links'] ?? [];
             <span class="status-pill"><?= Yii::t('app', 'Last {days} days', ['days' => $analytics['days']]) ?></span>
         </div>
         <div class="analytics-summary">
-            <?php foreach ([['users', 'visitors', 'Unique visitors'], ['activity', 'page_views', 'Page views']] as [$icon, $key, $label]): ?>
+            <?php foreach ([
+                ['users', 'visitors', Yii::t('app', 'Unique visitors')],
+                ['activity', 'page_views', Yii::t('app', 'Page views')],
+                ['inbox', 'inquiries', Yii::t('app', 'New inquiries')],
+            ] as [$icon, $key, $label]): ?>
                 <?php $trend = $analytics['trend'][$key]; ?>
                 <article class="card analytics-kpi">
                     <span class="analytics-kpi-icon"><?= Icon::show($icon) ?></span>
-                    <div><span><?= Yii::t('app', $label) ?></span><strong><?= Yii::$app->formatter->asInteger($analytics['totals'][$key]) ?></strong></div>
+                    <div><span><?= Html::encode($label) ?></span><strong><?= Yii::$app->formatter->asInteger($analytics['totals'][$key]) ?></strong></div>
                     <small class="trend <?= $trend < 0 ? 'is-down' : 'is-up' ?>"><?= $trend >= 0 ? '↑' : '↓' ?> <?= Html::encode(abs($trend)) ?>%</small>
                 </article>
             <?php endforeach; ?>
             <article class="card analytics-kpi">
                 <span class="analytics-kpi-icon"><?= Icon::show('pages') ?></span>
                 <div><span><?= Yii::t('app', 'Pages per visitor') ?></span><strong><?= $analytics['totals']['visitors'] ? Yii::$app->formatter->asDecimal($analytics['totals']['page_views'] / $analytics['totals']['visitors'], 1) : '0' ?></strong></div>
+            </article>
+            <article class="card analytics-kpi analytics-kpi-focus">
+                <span class="analytics-kpi-icon"><?= Icon::show('check') ?></span>
+                <div><span><?= Yii::t('app', 'Visitor-to-inquiry rate') ?></span><strong><?= Yii::$app->formatter->asDecimal($analytics['totals']['inquiry_rate'], 1) ?>%</strong></div>
             </article>
         </div>
         <div class="analytics-chart card" aria-label="<?= Yii::t('app', 'Daily page views') ?>">

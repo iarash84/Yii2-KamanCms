@@ -286,6 +286,7 @@ tests/                  تست‌های واحد و یکپارچه
 - [ارتقا](docs/update.md)
 - [امنیت](docs/security.md)
 - [چندزبانه‌سازی](docs/multilingual.md)
+- [ارزیابی محصول و تجربه کاربری](docs/product-review.md)
 - [راهنمای مدیریت](docs/administration.md)
 - [توسعه](docs/development.md)
 - [رفع اشکال](docs/troubleshooting.md)

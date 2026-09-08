@@ -236,34 +236,25 @@
         const slides = Array.from(heroSlider.querySelectorAll('[data-hero-slide]'));
         const dots = Array.from(heroSlider.querySelectorAll('[data-hero-dot]'));
         let activeSlide = 0;
-        let sliderTimer = null;
         const showSlide = function (index) {
             activeSlide = (index + slides.length) % slides.length;
             slides.forEach(function (slide, slideIndex) {
                 const active = slideIndex === activeSlide;
                 slide.classList.toggle('is-active', active);
                 slide.setAttribute('aria-hidden', active ? 'false' : 'true');
+                slide.toggleAttribute('inert', !active);
             });
             dots.forEach(function (dot, dotIndex) {
                 dot.setAttribute('aria-current', dotIndex === activeSlide ? 'true' : 'false');
             });
         };
-        const startSlider = function () {
-            if (slides.length < 2 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-            window.clearInterval(sliderTimer);
-            sliderTimer = window.setInterval(function () { showSlide(activeSlide + 1); }, 6500);
-        };
-        const moveSlide = function (offset) { showSlide(activeSlide + offset); startSlider(); };
+        const moveSlide = function (offset) { showSlide(activeSlide + offset); };
         const previous = heroSlider.querySelector('[data-hero-previous]');
         const next = heroSlider.querySelector('[data-hero-next]');
         if (previous) previous.addEventListener('click', function () { moveSlide(-1); });
         if (next) next.addEventListener('click', function () { moveSlide(1); });
-        dots.forEach(function (dot) { dot.addEventListener('click', function () { showSlide(Number(dot.dataset.heroDot)); startSlider(); }); });
-        heroSlider.addEventListener('mouseenter', function () { window.clearInterval(sliderTimer); });
-        heroSlider.addEventListener('mouseleave', startSlider);
-        heroSlider.addEventListener('focusin', function () { window.clearInterval(sliderTimer); });
-        heroSlider.addEventListener('focusout', startSlider);
-        startSlider();
+        dots.forEach(function (dot) { dot.addEventListener('click', function () { showSlide(Number(dot.dataset.heroDot)); }); });
+        showSlide(0);
     }
 
     const dashboard = document.querySelector('[data-dashboard-widgets]');

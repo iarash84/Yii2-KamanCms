@@ -83,6 +83,20 @@ class UiCompletenessTest extends DatabaseTestCase
         self::assertStringNotContainsString('data-theme-option="dark"', $output);
     }
 
+    public function testPublicJourneyHasAVisiblePrimaryActionAndClearFormExpectations(): void
+    {
+
+        Yii::$app->user->logout(false);
+        $homepage = Yii::$app->runAction('site/index');
+        self::assertStringContainsString(Yii::t('app', 'Start a project'), $homepage);
+        self::assertStringContainsString('home-trust-strip', $homepage);
+        Yii::$app->response->clear();
+        $order = Yii::$app->runAction('site/order');
+        self::assertStringContainsString('form-assurance', $order);
+        self::assertStringContainsString(Yii::t('app', 'What happens next'), $order);
+        self::assertStringContainsString('type="tel"', $order);
+    }
+
     public function testAdminShellProvidesResponsiveNavigationAndConfirmationDialog(): void
     {
         $admin = $this->createUser('superAdmin', 'admin-ui-shell');

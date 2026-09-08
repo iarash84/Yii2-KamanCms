@@ -154,4 +154,28 @@ class SmokeTest extends DatabaseTestCase
         self::assertSame(1, (int) $second->show_content);
         self::assertSame(1, (int) Carousel::find()->where(['show_content' => 1])->count());
     }
+
+    public function testCarouselContentCanBeLocalized(): void
+    {
+        $user = $this->createUser('editor', 'carousel-translation-editor');
+        $slide = new Carousel([
+            'user_id' => $user->id,
+            'image' => 'img/portfolio/hero-studio.webp',
+            'title' => 'عنوان فارسی',
+            'text' => '<p>متن فارسی</p>',
+            'show_content' => 1,
+            'status' => 1,
+        ]);
+        self::assertTrue($slide->save());
+        self::assertTrue($slide->saveTranslations(['en' => [
+            'title' => 'English hero title',
+            'text' => '<p>English hero text</p>',
+            'primary_button_label' => 'Start now',
+        ]]));
+
+        Yii::$app->languageManager->activate('en');
+        $output = Yii::$app->runAction('site/index');
+        self::assertStringContainsString('English hero title', $output);
+        self::assertStringContainsString('English hero text', $output);
+    }
 }

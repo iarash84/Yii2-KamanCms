@@ -2,6 +2,7 @@
 
 namespace frontend\models;
 
+use common\validators\PhoneNumberValidator;
 use Yii;
 use yii\base\Model;
 
@@ -24,15 +25,16 @@ class OpportunityForm extends Model
         return [
             // name, email, subject and body are required
             [['name', 'email'], 'required'],
+            [['name', 'email', 'phoneNumber'], 'filter', 'filter' => 'trim'],
+            [['name'], 'string', 'max' => 255],
             [['resume'], 'file', 'extensions' => ['pdf'], 'mimeTypes' => ['application/pdf'],
                 'maxSize' => 5 * 1024 * 1024, 'checkExtensionByMimeType' => true],
             // email has to be a valid email address
             ['email', 'email'],
-            ['email', 'filter', 'filter' => 'trim'],
+            ['email', 'string', 'max' => 255],
             // verifyCode needs to be entered correctly
             ['verifyCode', \common\validators\TextCaptchaValidator::class],
-            ['phoneNumber', 'integer', 'integerOnly'=>true, 'min'=>10],
-            ['phoneNumber', 'filter', 'filter' => 'trim'],
+            ['phoneNumber', PhoneNumberValidator::class],
         ];
     }
 

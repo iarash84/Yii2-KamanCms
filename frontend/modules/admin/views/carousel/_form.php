@@ -48,6 +48,8 @@ $form = ActiveForm::begin([
         ->hint(Yii::t('app', 'Only one slide can display content. Selecting this option clears it from the previous slide.')) ?>
     <?= $form->field($model, 'status')->checkbox() ?>
 
+    <?= $this->render('@app/modules/admin/views/_translation_fields', ['model' => $model]) ?>
+
     <div class="form-actions">
         <?= Html::submitButton(Icon::show('save') . Yii::t('app', 'Save'), ['class' => 'btn']) ?>
     </div>

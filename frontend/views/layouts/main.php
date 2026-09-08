@@ -28,6 +28,7 @@ foreach (['Facebook', 'Twitter', 'Linkedin', 'Instagram', 'Youtube', 'Telegram',
     }
 }
 $siteName = trim((string) $settingValue('CompanyName')) ?: Yii::t('app', 'Website');
+$brandInitial = mb_strtoupper(mb_substr($siteName, 0, 1));
 $route = Yii::$app->controller->route;
 $isAdmin = Yii::$app->controller->module !== null
     && Yii::$app->controller->module->id === 'admin';
@@ -84,7 +85,7 @@ $this->registerLinkTag([
     <header class="site-header">
         <div class="container header-row">
             <?= Html::a(
-                Html::tag('span', 'B', ['class' => 'brand-mark', 'aria-hidden' => 'true'])
+                Html::tag('span', Html::encode($brandInitial), ['class' => 'brand-mark', 'aria-hidden' => 'true'])
                 . Html::tag('span', Html::encode($siteName)),
                 ['/site/index'],
                 ['class' => 'brand', 'aria-label' => Yii::t('app', 'Home')]
@@ -122,13 +123,12 @@ $this->registerLinkTag([
                         <?php endif; ?>
                     <?php endif; ?>
                     <?php if (!$isAdmin): ?>
-                        <li><?= Html::a(Icon::show('search') . Yii::t('app', 'Search'), ['/search/index']) ?></li>
+                        <li class="header-primary-action"><?= Html::a(Yii::t('app', 'Start a project'), ['/site/order'], ['class' => 'd-btn d-btn-primary d-btn-sm']) ?></li>
+                        <li class="header-icon-action"><?= Html::a(Icon::show('search') . Html::tag('span', Yii::t('app', 'Search'), ['class' => 'sr-only']), ['/search/index'], ['aria-label' => Yii::t('app', 'Search')]) ?></li>
                     <?php endif; ?>
                     <?php if (!$isAdmin): ?><li><?= $this->render('_appearance', ['inSidebar' => false]) ?></li><?php endif; ?>
                     <?php if ($canViewSubmissions): ?><li class="notification-control"><details><summary class="d-btn d-btn-square d-btn-ghost" aria-label="<?= Yii::t('app', 'Notifications') ?>"><?= Icon::show('bell') ?><?php if ($unreadSubmissionCount): ?><span class="notification-badge"><?= (int) $unreadSubmissionCount ?></span><?php endif; ?></summary><div class="notification-menu"><h2><?= Yii::t('app', 'Notifications') ?></h2><?php foreach ($submissionNotifications as $notification): ?><?= Html::a(Html::tag('span', Html::encode($notification['label'])) . Html::tag('strong', (string) $notification['count']), $notification['url'], ['class' => $notification['count'] ? 'has-unread' : null]) ?><?php endforeach; ?></div></details></li><?php endif; ?>
-                    <?php if (Yii::$app->user->isGuest): ?>
-                        <li><?= Html::a(Yii::t('app', 'Login'), ['/site/login']) ?></li>
-                    <?php else: ?>
+                    <?php if (!Yii::$app->user->isGuest): ?>
                         <li class="nav-menu">
                             <details>
                                 <summary class="nav-summary"><?= Html::encode(Yii::$app->user->identity->username) ?></summary>
@@ -265,7 +265,7 @@ $this->registerLinkTag([
                     </ul>
                 </nav>
             </div>
-            <div class="footer-bottom">&copy; <?= Yii::$app->formatter->asYear(time()) ?> <?= Html::encode($siteName) ?></div>
+            <div class="footer-bottom"><span>&copy; <?= Yii::$app->formatter->asYear(time()) ?> <?= Html::encode($siteName) ?></span><?php if (Yii::$app->user->isGuest): ?><?= Html::a(Yii::t('app', 'Admin login'), ['/site/login']) ?><?php endif; ?></div>
         </div>
     </footer>
 </div>

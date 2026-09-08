@@ -3,6 +3,7 @@
 namespace frontend\models;
 
 
+use common\validators\PhoneNumberValidator;
 use Yii;
 use yii\base\Model;
 
@@ -26,13 +27,15 @@ class ContactForm extends Model
         return [
             // name, email, subject and body are required
             [['name', 'email', 'subject', 'body'], 'required'],
+            [['name', 'email', 'phoneNumber', 'subject'], 'filter', 'filter' => 'trim'],
+            [['name', 'subject'], 'string', 'max' => 255],
+            [['body'], 'string', 'max' => 5000],
             // email has to be a valid email address
             ['email', 'email'],
-            ['email', 'filter', 'filter' => 'trim'],
+            ['email', 'string', 'max' => 255],
             // verifyCode needs to be entered correctly
             ['verifyCode', \common\validators\TextCaptchaValidator::class],
-            ['phoneNumber', 'integer', 'integerOnly'=>true, 'min'=>10],
-            ['phoneNumber', 'filter', 'filter' => 'trim'],
+            ['phoneNumber', PhoneNumberValidator::class],
         ];
     }
 

@@ -161,7 +161,8 @@ class CarouselController extends Controller
     {
         $transaction = Yii::$app->db->beginTransaction();
         try {
-            if (!$model->save()) {
+            if (!$model->save()
+                || !$model->saveTranslations(Yii::$app->request->post('translations', []))) {
                 $transaction->rollBack();
                 return false;
             }

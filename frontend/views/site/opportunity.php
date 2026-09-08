@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 <div class="site-opportunity public-form-card">
-    <header class="public-form-header"><h1><?= Html::encode($this->title) ?></h1></header>
+    <header class="public-form-header"><p class="text-overline"><?= Yii::t('app', 'Join the team') ?></p><h1><?= Html::encode($this->title) ?></h1></header>
     <div class="prose public-form-intro">
         <?php
             $setting = new \frontend\models\Setting();
@@ -23,13 +23,15 @@ $this->params['breadcrumbs'][] = $this->title;
         ?>
     </div>
 
-            <?php $form = ActiveForm::begin(['id' => 'contact-form', 'options'=>['enctype'=>'multipart/form-data']]); ?>
+            <?= $this->render('_submission_expectation') ?>
 
-            <?= $form->field($model, 'name')->textInput(['autofocus' => true]) ?>
+            <?php $form = ActiveForm::begin(['id' => 'opportunity-form', 'options'=>['enctype'=>'multipart/form-data']]); ?>
 
-            <?= $form->field($model, 'phoneNumber') ?>
+            <?= $form->field($model, 'name')->textInput(['autofocus' => true, 'autocomplete' => 'name']) ?>
 
-            <?= $form->field($model, 'email') ?>
+            <?= $form->field($model, 'phoneNumber')->input('tel', ['autocomplete' => 'tel', 'inputmode' => 'tel', 'dir' => 'ltr', 'placeholder' => '+98 912 000 0000']) ?>
+
+            <?= $form->field($model, 'email')->input('email', ['autocomplete' => 'email', 'dir' => 'ltr']) ?>
 
             <?= $form->field($model, 'resume')->fileInput([
                 'accept' => 'application/pdf',
@@ -47,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
 
             <div class="form-group">
-                <?= Html::submitButton(Yii::t('app', 'Send'), ['class' => 'd-btn d-btn-primary', 'name' => 'contact-button']) ?>
+                <?= Html::submitButton(Yii::t('app', 'Submit application'), ['class' => 'd-btn d-btn-primary', 'name' => 'opportunity-button']) ?>
             </div>
 
             <?php ActiveForm::end(); ?>
