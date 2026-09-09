@@ -435,6 +435,58 @@
         });
     }
 
+    document.querySelectorAll('[data-password-input]').forEach(function (field) {
+        const wrap = document.createElement('span');
+        wrap.className = 'password-field';
+        field.parentNode.insertBefore(wrap, field);
+        wrap.appendChild(field);
+        const toggle = document.createElement('button');
+        toggle.type = 'button';
+        toggle.className = 'password-toggle';
+        toggle.setAttribute('aria-label', field.dataset.passwordShowLabel || 'Show password');
+        toggle.setAttribute('aria-pressed', 'false');
+        toggle.innerHTML = '<svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Zm10 3a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/></svg>';
+        toggle.addEventListener('click', function () {
+            const visible = field.type === 'text';
+            field.type = visible ? 'password' : 'text';
+            toggle.setAttribute('aria-pressed', visible ? 'false' : 'true');
+            toggle.setAttribute('aria-label', visible ? (field.dataset.passwordShowLabel || 'Show password') : (field.dataset.passwordHideLabel || 'Hide password'));
+            field.focus();
+        });
+        wrap.appendChild(toggle);
+    });
+
+    const strengthField = document.querySelector('[data-password-strength]');
+    const strengthMeter = document.querySelector('[data-password-strength-meter]');
+    const strengthBar = strengthMeter ? strengthMeter.querySelector('.password-strength-bar') : null;
+    const strengthLabel = strengthMeter ? strengthMeter.querySelector('[data-password-strength-label]') : null;
+    const strengthLabels = strengthMeter && strengthMeter.dataset.passwordStrengthLabels ? JSON.parse(strengthMeter.dataset.passwordStrengthLabels) : [];
+    const requirementItems = Array.from(document.querySelectorAll('.password-requirements-list [data-requirement]'));
+    const passwordChecks = [
+        function (value) { return value.length >= 12; },
+        function (value) { return /[a-z]/.test(value) && /[A-Z]/.test(value); },
+        function (value) { return /\d/.test(value); },
+        function (value) { return /[^a-zA-Z\d]/.test(value); },
+    ];
+    const updatePasswordHints = function () {
+        if (!strengthField || !strengthMeter) return;
+        const value = strengthField.value;
+        let passed = 0;
+        passwordChecks.forEach(function (check, index) {
+            const ok = value.length > 0 && check(value);
+            if (ok) passed += 1;
+            const item = requirementItems[index];
+            if (item) item.classList.toggle('is-met', ok);
+        });
+        strengthMeter.hidden = value.length === 0;
+        if (strengthBar) strengthBar.dataset.level = String(passed);
+        if (strengthLabel) strengthLabel.textContent = passed === 0 ? '' : (strengthLabels[passed - 1] || '');
+    };
+    if (strengthField) {
+        strengthField.addEventListener('input', updatePasswordHints);
+        updatePasswordHints();
+    }
+
     document.querySelectorAll('[data-admin-tabs]').forEach(function (tabs) {
         const buttons = Array.from(tabs.querySelectorAll('[data-tab-target]'));
         const panels = Array.from(tabs.querySelectorAll('[data-tab-panel]'));

@@ -55,6 +55,8 @@ class Icon
         'bell' => 'M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4',
         'user' => 'M20 21a8 8 0 0 0-16 0m8-10a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z',
         'logout' => 'M10 17l5-5-5-5m5 5H3m12-9h6v18h-6',
+        'lock' => 'M7 11V8a5 5 0 0 1 10 0v3m-11 0h12a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1Zm6 4v2',
+        'shield' => 'M12 3 4 6v6c0 5 3.5 7.5 8 9 4.5-1.5 8-4 8-9V6l-8-3Zm-3 9 2.2 2.2L15.5 10',
     ];
 
     public static function show($name, array $options = [])
