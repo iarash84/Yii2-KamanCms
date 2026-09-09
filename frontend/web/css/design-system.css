@@ -818,6 +818,9 @@ input[type="file"]::file-selector-button { min-height: 2rem; margin-inline-end: 
 .admin-sidebar-mark { display: grid; width: 2rem; height: 2rem; flex: 0 0 auto; place-items: center; border-radius: .5rem; color: #fff; background: var(--color-primary-600); font-size: .78rem; font-weight: 700; }
 .admin-sidebar-context { display: block; max-width: 9.5rem; overflow: hidden; color: var(--color-text-muted); font-size: .68rem; line-height: 1.3; text-overflow: ellipsis; white-space: nowrap; }
 .admin-sidebar h2 { margin: .1rem 0 0; padding: 0; font-size: .875rem; font-weight: 700; }
+.admin-nav-search { margin-block-end: .6rem; }
+.admin-nav-search .d-input { width: 100%; min-height: 2.25rem; padding: .45rem .6rem; font-size: .78rem; }
+.admin-nav-empty { margin: .8rem .6rem; color: var(--color-text-muted); font-size: .75rem; text-align: center; }
 .admin-nav { display: grid; gap: .125rem; }
 .admin-nav a { position: relative; min-height: 2.35rem; gap: .65rem; padding: .5rem .65rem; border-radius: .45rem; color: var(--color-text-secondary); font-size: .82rem; font-weight: 550; }
 .admin-nav a .icon { width: 1.05rem; height: 1.05rem; color: var(--color-text-muted); stroke-width: 1.8; }

@@ -97,6 +97,41 @@
         });
     });
 
+    const adminNavSearch = document.querySelector('[data-admin-nav-search]');
+    if (adminNavSearch) {
+        const sidebar = adminNavSearch.closest('[data-admin-sidebar]');
+        const adminNav = sidebar.querySelector('.admin-nav');
+        const emptyMessage = sidebar.querySelector('[data-admin-nav-empty]');
+        const normalize = function (value) { return value.trim().toLocaleLowerCase(); };
+        const filterAdminNav = function () {
+            const query = normalize(adminNavSearch.value);
+            let visibleItems = 0;
+            adminNav.querySelectorAll(':scope > li').forEach(function (item) {
+                const group = item.querySelector(':scope > details');
+                if (!group) {
+                    const visible = !query || normalize(item.textContent).includes(query);
+                    item.hidden = !visible;
+                    if (visible) visibleItems++;
+                    return;
+                }
+
+                let groupVisible = false;
+                group.querySelectorAll('.admin-nav-submenu > li').forEach(function (subItem) {
+                    const visible = !query || normalize(subItem.textContent).includes(query);
+                    subItem.hidden = !visible;
+                    if (visible) groupVisible = true;
+                });
+                item.hidden = !groupVisible;
+                if (groupVisible) {
+                    visibleItems++;
+                    group.open = Boolean(query) || group.open;
+                }
+            });
+            emptyMessage.hidden = visibleItems > 0;
+        };
+        adminNavSearch.addEventListener('input', filterAdminNav);
+    }
+
     document.querySelectorAll('.admin-content form .form-control, .admin-content form input, .admin-content form select, .admin-content form textarea').forEach(function (field) {
         if (field.type === 'hidden' || field.type === 'submit') return;
         if (field.type === 'checkbox') field.classList.add('d-toggle', 'd-toggle-sm');

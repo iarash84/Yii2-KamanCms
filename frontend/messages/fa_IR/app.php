@@ -321,6 +321,8 @@ return [
     'Site light' => 'روشن سایت',
     'Site dark' => 'تیره سایت',
     'Open admin navigation' => 'باز کردن منوی مدیریت',
+    'Search admin navigation' => 'جست‌وجو در منوی مدیریت',
+    'No matching admin sections' => 'بخشی با این عبارت پیدا نشد',
     'Confirm action' => 'تأیید عملیات',
     'This action cannot be undone.' => 'این عملیات قابل بازگشت نیست.',
     'Confirm' => 'تأیید',

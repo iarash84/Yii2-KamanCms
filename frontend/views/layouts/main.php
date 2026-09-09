@@ -190,6 +190,10 @@ $this->registerLinkTag([
                             <h2><?= Yii::t('app', 'Admin panel') ?></h2>
                         </div>
                     </div>
+                    <div class="admin-nav-search">
+                        <label class="sr-only" for="admin-nav-search"><?= Yii::t('app', 'Search admin navigation') ?></label>
+                        <input id="admin-nav-search" class="d-input d-input-bordered" type="search" data-admin-nav-search placeholder="<?= Yii::t('app', 'Search admin navigation') ?>" autocomplete="off">
+                    </div>
                     <ul class="admin-nav">
                         <li><?= Html::a(Icon::show('dashboard') . Yii::t('app', 'Dashboard'), ['/admin'], ['aria-current' => $current('admin/dashboard')]) ?></li>
                         <?php if (Yii::$app->user->can('manageContent') || Yii::$app->user->can('manageMenus') || Yii::$app->user->can('managePages') || Yii::$app->user->can('manageMedia')): ?>
@@ -271,6 +275,7 @@ $this->registerLinkTag([
                             </li>
                         <?php endif; ?>
                     </ul>
+                    <p class="admin-nav-empty" data-admin-nav-empty hidden><?= Yii::t('app', 'No matching admin sections') ?></p>
                     <?= $this->render('_appearance', ['inSidebar' => true]) ?>
                 </aside>
                 <section class="admin-content">

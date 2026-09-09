@@ -110,6 +110,8 @@ class UiCompletenessTest extends DatabaseTestCase
         self::assertStringContainsString('admin-sidebar-header', $output);
         self::assertStringContainsString('data-admin-sidebar-toggle', $output);
         self::assertStringContainsString('data-admin-sidebar', $output);
+        self::assertStringContainsString('data-admin-nav-search', $output);
+        self::assertStringContainsString('data-admin-nav-empty', $output);
         self::assertStringContainsString('data-admin-nav-group', $output);
         self::assertStringContainsString('admin-nav-submenu', $output);
         self::assertStringContainsString('data-confirmation-dialog', $output);
