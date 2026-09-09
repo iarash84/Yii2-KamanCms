@@ -190,6 +190,12 @@ class UiCompletenessTest extends DatabaseTestCase
 
         $media = Yii::$app->runAction('admin/media/index');
         self::assertStringContainsString('data-image-preview', $media);
+
+        $backup = Yii::$app->runAction('admin/backup/index');
+        self::assertStringContainsString('data-download-form', $backup);
+        $export = Yii::$app->runAction('admin/export/index');
+        self::assertStringContainsString('data-download-form', $export);
+        self::assertStringContainsString('resetDownloadFormLoading', file_get_contents(Yii::getAlias('@webroot/js/app.js')));
     }
 
     public function testDashboardControlsAndCompleteUserProfileEditorAreRendered(): void

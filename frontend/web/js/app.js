@@ -224,6 +224,11 @@
         const spinner = submit.querySelector('[data-submit-spinner]');
         if (spinner) spinner.remove();
     };
+    const resetDownloadFormLoading = function (form) {
+        if (form.dataset.downloadForm !== undefined) {
+            window.setTimeout(function () { resetFormLoading(form); }, 500);
+        }
+    };
     document.querySelectorAll('form').forEach(function (form) {
         if (form.method === 'dialog' || form.getAttribute('method') === 'dialog') return;
         form.addEventListener('submit', function (event) {
@@ -232,6 +237,7 @@
                 event.preventDefault();
                 return;
             }
+            resetDownloadFormLoading(form);
             window.setTimeout(function () {
                 if (event.defaultPrevented) resetFormLoading(form);
             }, 0);
@@ -244,6 +250,7 @@
                 event.preventDefault();
                 return false;
             }
+            resetDownloadFormLoading(form);
             window.setTimeout(function () {
                 if (event.isDefaultPrevented()) resetFormLoading(form);
             }, 0);
