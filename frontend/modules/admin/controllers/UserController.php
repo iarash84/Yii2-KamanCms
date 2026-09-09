@@ -45,7 +45,7 @@ class UserController extends Controller
             if ($model->load(Yii::$app->request->post())) {
                 $model->avatarFile = UploadedFile::getInstance($model, 'avatarFile');
                 if ($user = $model->signup()) {
-                    return $this->redirect(['/admin/users']);
+                    return $this->redirect(['index']);
                 }
             }
 
@@ -87,25 +87,10 @@ class UserController extends Controller
                 if ($role === null) {
                     $model->addError('role', Yii::t('app', 'Invalid role.'));
                 } else {
-                    $newAvatar = null;
-                    if ($model->avatarFile !== null) {
-                        $newAvatar = SecureUpload::storeAvatar($model->avatarFile);
-                        $model->avatar = $newAvatar;
-                    } elseif ($model->removeAvatar) {
-                        $model->avatar = null;
-                    }
-
-                    if ($model->save(false)) {
-                        if (($newAvatar !== null || $model->removeAvatar) && $oldAvatar !== $model->avatar) {
-                            SecureUpload::deleteAvatar($oldAvatar);
-                        }
+                    if ($this->saveProfile($model, $oldAvatar)) {
                         $auth->revokeAll($model->id);
                         $auth->assign($role, $model->id);
                         return $this->redirect(['index']);
-                    }
-                    if ($newAvatar !== null) {
-                        SecureUpload::deleteAvatar($newAvatar);
-                        $model->avatar = $oldAvatar;
                     }
                 }
             }
@@ -118,6 +103,23 @@ class UserController extends Controller
             return $this->render('update', [
                 'model' => $model,
             ]);
+    }
+
+    public function actionProfile()
+    {
+        $model = $this->findModel(Yii::$app->user->id);
+        $model->scenario = 'profile';
+        $oldAvatar = $model->avatar;
+
+        if ($model->load(Yii::$app->request->post())) {
+            $model->avatarFile = UploadedFile::getInstance($model, 'avatarFile');
+            if ($model->validate() && $this->saveProfile($model, $oldAvatar)) {
+                Yii::$app->session->setFlash('success', Yii::t('app', 'Profile updated successfully.'));
+                return $this->redirect(['profile']);
+            }
+        }
+
+        return $this->render('profile', ['model' => $model]);
     }
 
     /**
@@ -134,14 +136,16 @@ class UserController extends Controller
             $user = User::find()->where(['id' => Yii::$app->user->identity->getId()])->one();
             $user->setPassword($model->newPassword);
             $user->generateAuthKey();
-            $user->save();
-//            Yii::$app->session->setFlash('success', Yii::t('app','Your password changes successfully'));
-            return $this->redirect(['/changepass']);
+            if ($user->save(false)) {
+                Yii::$app->session->setFlash('success', Yii::t('app', 'Password changed successfully.'));
+                return $this->redirect(['change']);
+            }
+            $model->addError('newPassword', Yii::t('app', 'Unable to save the new password.'));
         } else {
-            return $this->render('changePassword', [
-                'model' => $model,
-            ]);
+            return $this->render('changePassword', ['model' => $model]);
         }
+
+        return $this->render('changePassword', ['model' => $model]);
     }
 
     public function actionLog(){
@@ -199,5 +203,29 @@ class UserController extends Controller
                 Yii::t('app', 'The last super administrator cannot be removed or demoted.')
             );
         }
+    }
+
+    private function saveProfile(User $model, $oldAvatar)
+    {
+        $newAvatar = null;
+        if ($model->avatarFile !== null) {
+            $newAvatar = SecureUpload::storeAvatar($model->avatarFile);
+            $model->avatar = $newAvatar;
+        } elseif ($model->removeAvatar) {
+            $model->avatar = null;
+        }
+
+        if ($model->save(false)) {
+            if (($newAvatar !== null || $model->removeAvatar) && $oldAvatar !== $model->avatar) {
+                SecureUpload::deleteAvatar($oldAvatar);
+            }
+            return true;
+        }
+
+        if ($newAvatar !== null) {
+            SecureUpload::deleteAvatar($newAvatar);
+            $model->avatar = $oldAvatar;
+        }
+        return false;
     }
 }

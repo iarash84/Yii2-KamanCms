@@ -154,6 +154,7 @@ $this->registerLinkTag([
                                 </summary>
                                 <ul class="nav-submenu">
                                     <li><?= Html::a(Yii::t('app', 'Admin panel'), ['/admin']) ?></li>
+                                    <li><?= Html::a(Yii::t('app', 'Edit profile'), ['/admin/user/profile']) ?></li>
                                     <li><?= Html::a(Yii::t('app', 'Change Password'), ['/admin/user/change']) ?></li>
                                     <li><?= Html::a(Yii::t('app', 'Logout'), ['/site/logout'], ['data-method' => 'post']) ?></li>
                                 </ul>

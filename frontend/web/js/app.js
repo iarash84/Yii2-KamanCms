@@ -113,18 +113,26 @@
         else button.classList.add('d-btn-primary');
     });
 
-    document.querySelectorAll('[data-avatar-input]').forEach(function (input) {
-        input.addEventListener('change', function () {
-            const file = input.files && input.files[0];
-            const preview = input.closest('.user-avatar-panel')?.querySelector('[data-avatar-preview]');
-            if (!file || !preview || !file.type.startsWith('image/')) return;
+    document.addEventListener('change', function (event) {
+        const input = event.target.closest('[data-avatar-input]');
+        if (!input) return;
+        const file = input.files && input.files[0];
+        const panel = input.closest('.user-avatar-panel');
+        const preview = panel ? panel.querySelector('[data-avatar-preview]') : null;
+        if (!file || !preview) return;
+        if (file.type && !file.type.startsWith('image/')) return;
+
+        const reader = new FileReader();
+        reader.addEventListener('load', function () {
             const image = document.createElement('img');
-            const objectUrl = URL.createObjectURL(file);
             image.alt = '';
-            image.src = objectUrl;
-            image.addEventListener('load', function () { URL.revokeObjectURL(objectUrl); }, {once: true});
+            image.src = String(reader.result);
             preview.replaceChildren(image);
         });
+        reader.addEventListener('error', function () {
+            input.value = '';
+        });
+        reader.readAsDataURL(file);
     });
 
     const confirmationDialog = document.querySelector('[data-confirmation-dialog]');

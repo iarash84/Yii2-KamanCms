@@ -66,6 +66,7 @@ class User extends ActiveRecord implements IdentityInterface
             [['username', 'email'], 'required'],
             [['username', 'email'], 'string', 'max' => 255],
             ['full_name', 'string', 'max' => 160],
+            ['full_name', 'required', 'on' => 'profile'],
             ['job_title', 'string', 'max' => 120],
             ['phone', 'string', 'max' => 32],
             ['phone', \common\validators\PhoneNumberValidator::class, 'skipOnEmpty' => true],
@@ -90,6 +91,16 @@ class User extends ActiveRecord implements IdentityInterface
                 'maxSize' => 2 * 1024 * 1024,
             ],
         ];
+    }
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios['profile'] = [
+            'full_name', 'email', 'avatarFile', 'removeAvatar', 'job_title',
+            'phone', 'location', 'website', 'bio',
+        ];
+        return $scenarios;
     }
 
 

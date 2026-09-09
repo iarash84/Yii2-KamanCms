@@ -110,4 +110,22 @@ class AdminFormSubmissionTest extends DatabaseTestCase
         self::assertSame('Writes product documentation.', $user->bio);
         self::assertArrayHasKey('editor', Yii::$app->authManager->getRolesByUser($user->id));
     }
+
+    public function testProfileScenarioCannotChangeRoleOrUsername(): void
+    {
+        $user = $this->createUser('editor', 'profile-scope-user');
+        $user->scenario = 'profile';
+
+        self::assertTrue($user->load(['User' => [
+            'username' => 'unauthorized-username',
+            'role' => 'superAdmin',
+            'full_name' => 'Profile Owner',
+            'email' => 'profile-owner@example.test',
+        ]]));
+        self::assertTrue($user->validate(), json_encode($user->errors));
+        self::assertSame('profile-scope-user', $user->username);
+        self::assertNull($user->role);
+        self::assertSame('Profile Owner', $user->full_name);
+        self::assertSame('profile-owner@example.test', $user->email);
+    }
 }

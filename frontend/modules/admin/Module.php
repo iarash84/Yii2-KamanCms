@@ -51,7 +51,7 @@ class Module extends \yii\base\Module
         if ($controllerId === 'analytics') {
             return 'viewAnalytics';
         }
-        if ($controllerId === 'user' && $actionId === 'change') {
+        if ($controllerId === 'user' && in_array($actionId, ['change', 'profile'], true)) {
             return 'accessAdmin';
         }
 

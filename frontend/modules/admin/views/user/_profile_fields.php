@@ -50,6 +50,12 @@ $initial = $displayName === '' ? '?' : mb_strtoupper(mb_substr($displayName, 0, 
         <fieldset>
             <legend><?= Yii::t('app', 'Contact information') ?></legend>
             <div class="form-grid">
+                <?php if (!empty($includeEmail)): ?>
+                    <?= $form->field($model, 'email')->input('email', [
+                        'maxlength' => true,
+                        'dir' => 'ltr',
+                    ]) ?>
+                <?php endif; ?>
                 <?= $form->field($model, 'phone')->textInput(['maxlength' => true, 'dir' => 'ltr']) ?>
                 <?= $form->field($model, 'location')->textInput(['maxlength' => true]) ?>
                 <?= $form->field($model, 'website')->textInput(['maxlength' => true, 'dir' => 'ltr']) ?>

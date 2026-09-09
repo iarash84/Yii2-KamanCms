@@ -24,6 +24,9 @@ return [
         ],
     ],
     'components' => [
+        'assetManager' => [
+            'appendTimestamp' => true,
+        ],
         'mutex' => [
             'class' => yii\mutex\FileMutex::class,
             'mutexPath' => '@runtime/mutex',

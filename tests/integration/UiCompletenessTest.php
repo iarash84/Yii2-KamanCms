@@ -222,6 +222,25 @@ class UiCompletenessTest extends DatabaseTestCase
         self::assertStringContainsString('user-profile-editor', $users);
     }
 
+    public function testEveryAdminRoleCanEditOnlyItsOwnProfileDetails(): void
+    {
+        $editor = $this->createUser('editor', 'self-profile-editor');
+        self::assertTrue(Yii::$app->user->login($editor));
+
+        $profile = Yii::$app->runAction('admin/user/profile');
+        self::assertStringContainsString('id="form-profile"', $profile);
+        self::assertStringContainsString('name="User[full_name]"', $profile);
+        self::assertStringContainsString('name="User[email]"', $profile);
+        self::assertStringContainsString('name="User[avatarFile]"', $profile);
+        self::assertStringNotContainsString('name="User[username]"', $profile);
+        self::assertStringNotContainsString('name="User[role]"', $profile);
+        self::assertStringContainsString('/admin/user/profile', $profile);
+
+        $javascript = file_get_contents(Yii::getAlias('@webroot/js/app.js'));
+        self::assertStringContainsString("event.target.closest('[data-avatar-input]')", $javascript);
+        self::assertStringContainsString('reader.readAsDataURL(file)', $javascript);
+    }
+
     public function testServiceRequestsFitWithoutAHorizontalTableAndHomepageActionsAreIconOnly(): void
     {
         $admin = $this->createUser('superAdmin', 'service-request-admin');
