@@ -95,9 +95,12 @@ class UserController extends Controller
                 }
             }
 
-            $roles = Yii::$app->authManager->getRolesByUser($model->id);
+            $roles = array_intersect(
+                array_keys(Yii::$app->authManager->getRolesByUser($model->id)),
+                ['editor', 'admin', 'superAdmin']
+            );
             if ($model->role === null) {
-                $model->role = empty($roles) ? 'editor' : array_keys($roles)[0];
+                $model->role = empty($roles) ? $this->fallbackRole($model->id) : reset($roles);
             }
 
             return $this->render('update', [
@@ -203,6 +206,12 @@ class UserController extends Controller
                 Yii::t('app', 'The last super administrator cannot be removed or demoted.')
             );
         }
+    }
+
+    private function fallbackRole($userId)
+    {
+        $activeUsers = User::find()->where(['status' => User::STATUS_ACTIVE])->count();
+        return $activeUsers === 1 && User::findOne($userId) !== null ? 'superAdmin' : 'editor';
     }
 
     private function saveProfile(User $model, $oldAvatar)

@@ -6,8 +6,11 @@ use yii\widgets\ActiveForm;
 
 $this->title = Yii::t('app', 'Edit profile');
 $this->params['breadcrumbs'][] = $this->title;
-$roles = array_keys(Yii::$app->authManager->getRolesByUser($model->id));
-$role = $roles[0] ?? 'editor';
+$roles = array_intersect(
+    array_keys(Yii::$app->authManager->getRolesByUser($model->id)),
+    ['editor', 'admin', 'superAdmin']
+);
+$role = reset($roles) ?: 'editor';
 $roleLabels = [
     'editor' => Yii::t('app', 'Editor'),
     'admin' => Yii::t('app', 'Admin'),

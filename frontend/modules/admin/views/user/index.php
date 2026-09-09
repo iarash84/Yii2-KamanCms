@@ -1,5 +1,6 @@
 <?php
 
+use common\models\User;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\GridView;
@@ -69,7 +70,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'value' => static function ($data) {
                     $labels = ['superAdmin' => Yii::t('app', 'Super Admin'), 'admin' => Yii::t('app', 'Admin'), 'editor' => Yii::t('app', 'Editor')];
-                    $roles = array_keys(Yii::$app->authManager->getRolesByUser($data->id));
+                    $roles = array_intersect(
+                        array_keys(Yii::$app->authManager->getRolesByUser($data->id)),
+                        array_keys($labels)
+                    );
+                    if (!$roles && User::find()->where(['status' => User::STATUS_ACTIVE])->count() === 1) {
+                        $roles = ['superAdmin'];
+                    }
                     return implode(' ', array_map(static fn ($role) => Html::tag('span', Html::encode($labels[$role] ?? $role), ['class' => 'status-pill']), $roles));
                 },
             ],
