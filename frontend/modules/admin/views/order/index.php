@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use frontend\widgets\AdminActionColumn;
+use frontend\widgets\AdminButton;
 use frontend\widgets\Icon;
 use yii\helpers\Url;
 
@@ -78,7 +79,23 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['class' => 'admin-table-actions-column'],
                 'contentOptions' => ['class' => 'admin-table-actions-column', 'data-label' => Yii::t('app', 'Actions')],
                 'template' => '{detail} {delete}',
-                'buttons' => ['detail' => static fn ($url, $model) => Html::button(Icon::show('eye'), ['class' => 'd-btn d-btn-sm d-btn-square d-btn-ghost', 'data-remote-dialog-url' => Url::to(['detail', 'id' => $model->id]), 'data-error-message' => Yii::t('app', 'Unable to load details.'), 'aria-label' => Yii::t('app', 'View')])],
+                'buttons' => [
+                    'detail' => static fn ($url, $model) => Html::button(Icon::show('eye'), [
+                        'class' => 'd-btn d-btn-sm d-btn-square d-btn-ghost',
+                        'data-remote-dialog-url' => Url::to(['detail', 'id' => $model->id]),
+                        'data-error-message' => Yii::t('app', 'Unable to load details.'),
+                        'aria-label' => Yii::t('app', 'View'),
+                        'title' => Yii::t('app', 'View'),
+                    ]),
+                    'delete' => static fn ($url) => Html::a(Icon::show('trash'), $url, [
+                        'class' => AdminButton::classes('compact', 'admin-action-delete'),
+                        'title' => Yii::t('app', 'Delete'),
+                        'aria-label' => Yii::t('app', 'Delete'),
+                        'data-confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
+                        'data-method' => 'post',
+                        'data-pjax' => '0',
+                    ]),
+                ],
             ],
         ],
     ]); ?>

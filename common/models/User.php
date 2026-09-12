@@ -62,7 +62,9 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['username', 'email', 'full_name', 'job_title', 'phone', 'location', 'website'], 'filter', 'filter' => 'trim'],
+            [['username', 'email', 'full_name', 'job_title', 'phone', 'location', 'website'], 'filter', 'filter' => static function ($value) {
+                return trim((string) $value);
+            }],
             [['username', 'email'], 'required'],
             [['username', 'email'], 'string', 'max' => 255],
             ['full_name', 'string', 'max' => 160],

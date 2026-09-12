@@ -117,7 +117,6 @@ return [
     'Save' => 'ذخیره',
     'Please try again or contact us if the problem continues.' => 'دوباره تلاش کنید و در صورت ادامه مشکل با ما تماس بگیرید.',
     'Back to home' => 'بازگشت به صفحه اصلی',
-    'Upload a PDF file within the allowed size.' => 'یک فایل PDF با اندازه مجاز بارگذاری کنید.',
     'Enter the test verification code.' => 'کد تأیید آزمایشی را وارد کنید.',
     'What is {left} + {right}?' => 'حاصل {left} + {right} چند است؟',
     'The verification answer is incorrect.' => 'پاسخ اعتبارسنجی صحیح نیست.',
@@ -492,4 +491,19 @@ return [
     'Your password is stored hashed and never visible to administrators.' => 'کلمه عبور شما به‌صورت هش‌شده ذخیره می‌شود و برای هیچ مدیری قابل مشاهده نیست.',
     'Last updated' => 'آخرین به‌روزرسانی',
     'unknown' => 'نامشخص',
+
+    // Opportunity (job requests and resume upload)
+    'Review job applications and download the attached resumes.' => 'درخواست‌های همکاری را بررسی و رزومه‌های پیوست‌شده را دریافت کنید.',
+    'Unread applications are highlighted so you can answer candidates faster.' => 'درخواست‌های خوانده‌نشده برجسته می‌شوند تا سریع‌تر به داوطلبان پاسخ دهید.',
+    'This content is shown on the public job opportunity page.' => 'این محتوا در صفحه عمومی دعوت به همکاری نمایش داده می‌شود.',
+    'Edit the page introduction text for both languages.' => 'متن معرفی صفحه را برای هر دو زبان ویرایش کنید.',
+    'Tell us about yourself and attach your resume so the team can get back to you.' => 'خودتان را معرفی کنید و رزومه‌تان را پیوست کنید تا تیم با شما تماس بگیرد.',
+    'Applicant information' => 'اطلاعات داوطلب',
+    'Attach your resume (PDF)' => 'رزومه خود را پیوست کنید (PDF)',
+    'Drag the file here or choose it from your device. Maximum allowed size applies.' => 'فایل را اینجا رها کنید یا از دستگاه خود انتخاب کنید. حداکثر حجم مجاز اعمال می‌شود.',
+    'PDF format, up to 5 MB.' => 'فرمت PDF، حداکثر ۵ مگابایت.',
+    'Choose file' => 'انتخاب فایل',
+    'Replace file' => 'تغییر فایل',
+    'No resume attached' => 'رزومه‌ای پیوست نشده است',
+    'View resume file' => 'مشاهده فایل رزومه',
 ];

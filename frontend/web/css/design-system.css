@@ -304,6 +304,7 @@ p { margin-block: 0 var(--space-4); }
 .service-request-table .request-contact-column { width: 29%; }
 .service-request-table .request-date-column { width: 19%; }
 .service-request-table .request-status-column { width: 15%; }
+.service-request-table .admin-table-actions-column { width: 5.5rem; min-width: 5.5rem; }
 .request-customer-cell, .request-contact-cell { min-width: 0; }
 .request-customer-cell :is(strong, small), .request-contact-cell span { display: block; }
 .request-customer-cell small { margin-block-start: .2rem; color: var(--color-text-muted); }
@@ -960,6 +961,48 @@ input[type="file"]::file-selector-button { min-height: 2rem; margin-inline-end: 
 .password-strength-bar[data-level="4"] { width: 100%; background: var(--color-accent-500, #35a990); }
 .password-strength-label { flex: 0 0 auto; min-width: 5.5rem; color: var(--color-text-muted); font-size: .75rem; font-weight: 700; }
 
+/* Opportunity submissions (admin/opportunity) */
+.opportunity-submissions-card { display: grid; gap: var(--space-4); }
+.opportunity-submissions-heading { display: flex; align-items: center; gap: var(--space-3); margin-block-end: var(--space-2); }
+.opportunity-submissions-heading h2 { margin-block-end: .1rem; font-size: 1.1rem; }
+.opportunity-submissions-heading p { margin: 0; color: var(--color-text-muted); font-size: .8rem; }
+.opportunity-submissions-icon { display: grid; flex: 0 0 auto; width: 2.6rem; height: 2.6rem; place-items: center; border-radius: var(--radius-md); color: var(--color-primary-700); background: var(--color-primary-100); }
+.opportunity-resume-chip { display: inline-flex; align-items: center; gap: .4rem; padding: .3rem .7rem; border: 1px solid var(--color-primary-100); border-radius: 999px; color: var(--color-primary-700); background: var(--color-primary-50); font-size: .78rem; font-weight: 700; white-space: nowrap; transition: color var(--transition), background-color var(--transition), border-color var(--transition); }
+.opportunity-resume-chip:hover { color: #fff; border-color: var(--color-primary-600); background: var(--color-primary-600); }
+.opportunity-resume-chip .icon { width: .95rem; height: .95rem; }
+.opportunity-detail-card { max-width: 46rem; }
+.opportunity-view-actions { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.opportunity-resume-download { margin-block-end: var(--space-3); }
+.opportunity-resume-button { color: #fff; background: var(--color-primary-600); }
+.opportunity-resume-button:hover { background: var(--color-primary-700); }
+.opportunity-resume-type { padding-inline-start: .35rem; color: rgba(255, 255, 255, .72); font-size: .7rem; font-weight: 800; letter-spacing: .04em; }
+.opportunity-resume-link { display: inline-flex; align-items: center; gap: .4rem; font-weight: 700; }
+.opportunity-resume-link .icon { color: var(--color-primary-600); }
+.opportunity-page-preview { min-height: 3rem; color: var(--color-text); }
+
+/* Public opportunity form */
+.opportunity-form { display: grid; gap: var(--space-4); }
+.opportunity-form-fieldset { margin: 0; padding: var(--space-4); border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface-muted); }
+.opportunity-form-fieldset legend { padding-inline: var(--space-2); font-weight: 800; }
+.resume-upload-panel { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: var(--space-3); padding: var(--space-4); border: 1px dashed var(--color-border-strong); border-radius: var(--radius-md); background: var(--color-surface-raised); transition: border-color var(--transition), background-color var(--transition); }
+.resume-upload-panel:hover, .resume-upload-panel.has-file { border-color: var(--color-primary-500); }
+.resume-upload-panel.has-file { background: var(--color-primary-50); }
+.resume-upload-panel.is-dragover { border-color: var(--color-primary-600); background: var(--color-primary-50); }
+.resume-upload-icon { display: grid; width: 2.6rem; height: 2.6rem; place-items: center; border-radius: var(--radius-md); color: var(--color-primary-700); background: var(--color-primary-100); }
+.resume-upload-panel.has-file .resume-upload-icon { color: var(--color-accent-500, #35a990); background: var(--color-accent-soft); }
+.resume-upload-text { min-width: 0; display: grid; gap: .15rem; }
+.resume-upload-text strong { font-size: .9rem; }
+.resume-upload-text p { margin: 0; color: var(--color-text-muted); font-size: .78rem; }
+.resume-upload-field { display: grid; justify-items: start; gap: .3rem; }
+.resume-upload-field input[type="file"] { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.resume-upload-field .resume-upload-button { display: inline-flex; min-height: 2.5rem; align-items: center; padding: .45rem 1rem; border: 1px solid var(--color-border-strong); border-radius: var(--radius-sm); color: var(--color-text); background: var(--color-surface); font-size: .84rem; font-weight: 700; cursor: pointer; transition: color var(--transition), background-color var(--transition), border-color var(--transition); }
+.resume-upload-field .resume-upload-button:hover { border-color: var(--color-primary-600); color: var(--color-primary-700); background: var(--color-primary-50); }
+.resume-upload-field .resume-upload-button.has-file { color: #fff; border-color: var(--color-primary-600); background: var(--color-primary-600); }
+.resume-upload-field .resume-upload-button:focus-visible { outline: 3px solid color-mix(in oklab, var(--color-primary-500) 55%, transparent); outline-offset: 2px; }
+.resume-upload-field .help-block { margin: 0; }
+.resume-upload-filename { overflow: hidden; margin: 0; color: var(--color-primary-700); font-size: .78rem; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+.resume-upload-help { margin: .2rem 0 0; color: var(--color-text-muted); font-size: .74rem; }
+
 .admin-interface .site-footer { margin-block-start: var(--space-5); padding-block: var(--space-5) var(--space-3); border-block-start: 1px solid var(--color-border); color: var(--color-text-muted); background: var(--color-surface); }
 .admin-interface .site-footer h2 { margin-block-end: .35rem; color: var(--color-text); font-size: .85rem; }
 .admin-interface .site-footer p, .admin-interface .site-footer a { color: var(--color-text-muted); font-size: .78rem; }
@@ -969,6 +1012,8 @@ input[type="file"]::file-selector-button { min-height: 2rem; margin-inline-end: 
 @media (max-width: 64rem) {
     .admin-shell { gap: 0; }
     .change-password-layout { grid-template-columns: 1fr; }
+    .resume-upload-panel { grid-template-columns: auto 1fr; }
+    .resume-upload-field { grid-column: 1 / -1; }
     .admin-sidebar { position: fixed; inset-block: 0; max-height: 100dvh; border-block: 0; border-inline-start: 0; border-radius: 0; }
     .admin-sidebar.is-open { box-shadow: var(--shadow-floating); }
     .admin-interface .primary-nav { inset-block-start: 4rem; max-height: calc(100dvh - 4rem); }
