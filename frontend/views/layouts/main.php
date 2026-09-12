@@ -16,9 +16,9 @@ AppAsset::register($this);
 $languageManager = Yii::$app->languageManager;
 $isRtl = $languageManager->isRtl();
 $settingTypes = ['CompanyName', 'Address', 'Email', 'PhoneNumber', 'Facebook', 'Twitter', 'Linkedin', 'Instagram', 'Youtube', 'Telegram', 'Aparat'];
-$settingRows = Setting::find()->with('translations')->where(['type' => $settingTypes])->indexBy('type')->all();
-$settingValue = static function ($type) use ($settingRows) {
-    return isset($settingRows[$type]) ? $settingRows[$type]->getLocalizedContent() : '';
+$settingValues = $this->params['settingValues'] ?? Setting::localizedMap($settingTypes);
+$settingValue = static function ($type) use ($settingValues) {
+    return $settingValues[$type] ?? '';
 };
 $socialLinks = [];
 foreach (['Facebook', 'Twitter', 'Linkedin', 'Instagram', 'Youtube', 'Telegram', 'Aparat'] as $network) {

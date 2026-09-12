@@ -29,6 +29,19 @@ class Setting extends \yii\db\ActiveRecord
     {
         return $this->getLocalized('content', $language);
     }
+
+    public static function localizedMap(array $types): array
+    {
+        $language = Yii::$app->languageManager->activeLanguage;
+        $types = array_values(array_unique($types));
+        sort($types);
+        $rows = self::find()->with('translations')->where(['type' => $types])->indexBy('type')->all();
+        $values = [];
+        foreach ($rows as $type => $model) {
+            $values[$type] = $model->getLocalizedContent($language);
+        }
+        return $values;
+    }
     /**
      * @inheritdoc
      */
