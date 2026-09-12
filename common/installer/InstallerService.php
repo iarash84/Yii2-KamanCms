@@ -292,7 +292,7 @@ class InstallerService
 
     private function writablePaths(): array
     {
-        return [$this->root . '/frontend/runtime', $this->root . '/console/runtime', $this->root . '/frontend/web/assets', $this->root . '/frontend/web/upload', $this->root . '/storage/resumes'];
+        return [$this->root . '/frontend/runtime', $this->root . '/console/runtime', $this->root . '/frontend/web/assets', $this->root . '/frontend/web/upload', $this->root . '/storage/resumes', $this->root . '/storage/analytics-queue'];
     }
 
     private function environmentPath(): string

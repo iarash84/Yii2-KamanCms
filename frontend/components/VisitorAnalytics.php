@@ -2,10 +2,10 @@
 
 namespace frontend\components;
 
+use common\components\AnalyticsQueue;
 use Yii;
 use yii\base\Application;
 use yii\base\BootstrapInterface;
-use yii\db\IntegrityException;
 use yii\web\Request;
 
 class VisitorAnalytics implements BootstrapInterface
@@ -41,57 +41,15 @@ class VisitorAnalytics implements BootstrapInterface
             }
             $visitorHash = hash_hmac('sha256', $date . '|' . $request->userIP . '|' . $userAgent, $secret);
 
-            $transaction = $app->db->beginTransaction();
-            try {
-                $this->increment('{{%visitor_daily}}', ['visit_date' => $date], $this->isUnique($date, $visitorHash, 'site', '*'));
-                $this->increment('{{%visitor_country_daily}}', ['visit_date' => $date, 'country_code' => $country], $this->isUnique($date, $visitorHash, 'country', $country));
-                $this->increment('{{%visitor_page_daily}}', ['visit_date' => $date, 'path' => $path], $this->isUnique($date, $visitorHash, 'page', $path));
-                $transaction->commit();
-                if (random_int(1, 100) === 1) {
-                    $app->db->createCommand()->delete('{{%visitor_unique}}', [
-                        '<', 'visit_date', gmdate('Y-m-d', strtotime('-90 days')),
-                    ])->execute();
-                }
-            } catch (\Throwable $exception) {
-                $transaction->rollBack();
-                throw $exception;
-            }
+            AnalyticsQueue::fromEnvironment()->enqueue([
+                'event_id' => bin2hex(random_bytes(16)),
+                'date' => $date,
+                'path' => $path,
+                'country' => $country,
+                'visitor_hash' => $visitorHash,
+            ]);
         } catch (\Throwable $exception) {
             Yii::warning('Visitor statistics could not be recorded: ' . $exception->getMessage(), __METHOD__);
-        }
-    }
-
-    private function isUnique($date, $hash, $type, $value)
-    {
-        try {
-            Yii::$app->db->createCommand()->insert('{{%visitor_unique}}', [
-                'visit_date' => $date,
-                'visitor_hash' => $hash,
-                'dimension_type' => $type,
-                'dimension_value' => $value,
-            ])->execute();
-            return true;
-        } catch (IntegrityException $exception) {
-            return false;
-        }
-    }
-
-    private function increment($table, array $condition, $unique)
-    {
-        $values = ['page_views' => 1, 'visitors' => $unique ? 1 : 0];
-        $updated = Yii::$app->db->createCommand()->update($table, [
-            'page_views' => new \yii\db\Expression('[[page_views]] + 1'),
-            'visitors' => new \yii\db\Expression('[[visitors]] + ' . ($unique ? '1' : '0')),
-        ], $condition)->execute();
-        if (!$updated) {
-            try {
-                Yii::$app->db->createCommand()->insert($table, array_merge($condition, $values))->execute();
-            } catch (IntegrityException $exception) {
-                Yii::$app->db->createCommand()->update($table, [
-                    'page_views' => new \yii\db\Expression('[[page_views]] + 1'),
-                    'visitors' => new \yii\db\Expression('[[visitors]] + ' . ($unique ? '1' : '0')),
-                ], $condition)->execute();
-            }
         }
     }
 
