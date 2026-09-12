@@ -190,8 +190,10 @@ class SiteController extends Controller
             PublicRateLimiter::enforce('opportunity');
         }
         $model = new OpportunityForm();
-        $model->resume = UploadedFile::getInstance($model, 'resume');
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $model->resume = UploadedFile::getInstance($model, 'resume');
+        }
+        if ($model->validate()) {
 
             $opportunity= new Opportunity();
             if (!empty($model->resume)) {
