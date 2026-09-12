@@ -96,6 +96,7 @@ return [
                 'admin/blog' => 'admin/blog/index',
                 'admin/users' => 'admin/user/index',
                 'admin/settings' => 'admin/setting/index',
+                'admin/media/folder/<folder:[A-Za-z0-9_-]+>' => 'admin/media/index',
                 'admin/<controller:[\w-]+>/<action:[\w-]+>' => 'admin/<controller>/<action>',
                 'admin/<controller:[\w-]+>' => 'admin/<controller>/index',
                 "<language:{$languagePattern}>" => 'site/index',

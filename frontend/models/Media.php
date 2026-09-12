@@ -24,6 +24,7 @@ class Media extends ActiveRecord
             [['path', 'original_name', 'mime_type', 'extension', 'size'], 'required'],
             [['size', 'created_by'], 'integer'],
             [['path', 'original_name', 'alt_text'], 'string', 'max' => 255],
+            [['folder'], 'string', 'max' => 120],
             [['mime_type'], 'string', 'max' => 100],
             [['extension'], 'string', 'max' => 16],
             [['path'], 'unique'],
@@ -32,7 +33,7 @@ class Media extends ActiveRecord
 
     public function attributeLabels()
     {
-        return ['alt_text' => Yii::t('app', 'Alternative text'), 'original_name' => Yii::t('app', 'File name'), 'mime_type' => Yii::t('app', 'File type'), 'size' => Yii::t('app', 'File size')];
+        return ['alt_text' => Yii::t('app', 'Alternative text'), 'folder' => Yii::t('app', 'Folder'), 'original_name' => Yii::t('app', 'File name'), 'mime_type' => Yii::t('app', 'File type'), 'size' => Yii::t('app', 'File size')];
     }
 
     public function getUrl()

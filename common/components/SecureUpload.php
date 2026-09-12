@@ -52,15 +52,23 @@ class SecureUpload
         return $name;
     }
 
-    public static function storeMedia(UploadedFile $file)
+    public static function storeMedia(UploadedFile $file, $folder = '')
     {
         self::validate($file, ['png', 'jpg', 'jpeg', 'gif', 'webp', 'pdf'], [
             'image/png', 'image/jpeg', 'image/gif', 'image/webp', 'application/pdf',
         ], 10 * 1024 * 1024);
         $extension = strtolower($file->extension);
-        $relative = 'upload/media/' . Yii::$app->security->generateRandomString(40) . '.' . $extension;
+        $folder = self::normalizeMediaFolder($folder);
+        $relative = 'upload/media/' . ($folder === '' ? '' : $folder . '/') . Yii::$app->security->generateRandomString(40) . '.' . $extension;
         self::save($file, Yii::getAlias('@webroot/' . $relative));
         return $relative;
+    }
+
+    public static function normalizeMediaFolder($folder)
+    {
+        $folder = trim(str_replace(['\\', '/'], '-', (string) $folder));
+        $folder = preg_replace('/[^A-Za-z0-9_-]+/', '-', $folder);
+        return trim((string) $folder, '-_');
     }
 
     private static function validate($file, array $extensions, array $mimeTypes, $maxSize)
