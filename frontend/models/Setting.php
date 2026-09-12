@@ -4,7 +4,6 @@ namespace frontend\models;
 
 use common\models\User;
 use Yii;
-use yii\helpers\Html;
 
 /**
  * This is the model class for table "tbl_setting".
@@ -297,15 +296,6 @@ class Setting extends \yii\db\ActiveRecord
     }
 
 
-    public function getTwitterLink()
-    {
-        $model = $this::find()->where(['type' => 'Twitter'])->one();
-
-        if($model == null || empty($model->content))
-            return null;
-        return '<li>'.Html::a('Twitter',$model->content,['rel'=>'noopener noreferrer']).'</li>';
-    }
-
     /**
      * @param $value
      */
@@ -328,15 +318,6 @@ class Setting extends \yii\db\ActiveRecord
         if($model == null)
             return null;
         return $model->content;
-    }
-
-    public function getLinkedinLink()
-    {
-        $model = $this::find()->where(['type' => 'Linkedin'])->one();
-
-        if($model == null || empty($model->content))
-            return null;
-        return '<li>'.Html::a('LinkedIn',$model->content,['rel'=>'noopener noreferrer']).'</li>';
     }
 
     /**
@@ -363,15 +344,6 @@ class Setting extends \yii\db\ActiveRecord
         return $model->content;
     }
 
-    public function getAparatLink()
-    {
-        $model = $this::find()->where(['type' => 'Aparat'])->one();
-
-        if($model == null || empty($model->content))
-            return null;
-        return '<li>'.Html::a('Aparat',$model->content,['rel'=>'noopener noreferrer']).'</li>';
-    }
-
     /**
      * @param $value
      */
@@ -394,15 +366,6 @@ class Setting extends \yii\db\ActiveRecord
         if($model == null)
             return null;
         return $model->content;
-    }
-
-    public function getTelegramLink()
-    {
-        $model = $this::find()->where(['type' => 'Telegram'])->one();
-
-        if($model == null || empty($model->content))
-            return null;
-        return '<li>'.Html::a('Telegram',$model->content,['rel'=>'noopener noreferrer']).'</li>';
     }
 
     /**
@@ -429,15 +392,6 @@ class Setting extends \yii\db\ActiveRecord
         return $model->content;
     }
 
-    public function getYoutubeLink()
-    {
-        $model = $this::find()->where(['type' => 'Youtube'])->one();
-
-        if($model == null || empty($model->content))
-            return null;
-        return '<li>'.Html::a('YouTube',$model->content,['rel'=>'noopener noreferrer']).'</li>';
-    }
-
     /**
      * @param $value
      */
@@ -460,15 +414,6 @@ class Setting extends \yii\db\ActiveRecord
         if($model == null)
             return null;
         return $model->content;
-    }
-
-    public function getInstagramLink()
-    {
-        $model = $this::find()->where(['type' => 'Instagram'])->one();
-
-        if($model == null || empty($model->content))
-            return null;
-        return '<li>'.Html::a('Instagram',$model->content,['rel'=>'noopener noreferrer']).'</li>';
     }
 
 
@@ -500,15 +445,6 @@ class Setting extends \yii\db\ActiveRecord
     /**
      * @return mixed|null
      */
-    public function getFacebookLink()
-    {
-        $model = $this::find()->where(['type' => 'Facebook'])->one();
-
-        if($model == null || empty($model->content))
-            return null;
-        return '<li>'.Html::a('Facebook',$model->content,['rel'=>'noopener noreferrer']).'</li>';
-    }
-
     /**
      * @param $value
      */
