@@ -1,0 +1,8 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^php -l frontend/messages/fa_IR/app\\.php$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}

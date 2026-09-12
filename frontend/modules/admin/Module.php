@@ -48,6 +48,9 @@ class Module extends \yii\base\Module
         if ($controllerId === 'dashboard') {
             return 'accessAdmin';
         }
+        if ($controllerId === 'notification') {
+            return 'viewSubmissions';
+        }
         if ($controllerId === 'analytics') {
             return 'viewAnalytics';
         }

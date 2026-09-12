@@ -49,13 +49,33 @@ $footerMenu = $isAdmin ? [] : MenuItem::activeRoots('footer');
 $submissionNotifications = [];
 $canViewSubmissions = !Yii::$app->user->isGuest && Yii::$app->user->can('viewSubmissions');
 if ($canViewSubmissions) {
-    $submissionNotifications = [
-        ['count' => Contact::find()->where(['read_at' => null])->count(), 'label' => Yii::t('app', 'Contact'), 'url' => ['/admin/contact/index']],
-        ['count' => Order::find()->where(['read_at' => null])->count(), 'label' => Yii::t('app', 'Service requests'), 'url' => ['/admin/order/index']],
-        ['count' => Opportunity::find()->where(['read_at' => null])->count(), 'label' => Yii::t('app', 'Job opportunity'), 'url' => ['/admin/opportunity/index']],
+    $notificationSources = [
+        ['model' => Contact::class, 'label' => Yii::t('app', 'Contact'), 'url' => ['/admin/contact/index']],
+        ['model' => Order::class, 'label' => Yii::t('app', 'Service requests'), 'url' => ['/admin/order/index']],
+        ['model' => Opportunity::class, 'label' => Yii::t('app', 'Job opportunity'), 'url' => ['/admin/opportunity/index']],
     ];
+    foreach ($notificationSources as $source) {
+        foreach ($source['model']::find()->where(['read_at' => null])->orderBy(['created_at' => SORT_DESC])->limit(5)->all() as $model) {
+            $title = $model instanceof Contact
+                ? (trim((string) $model->subject) ?: trim((string) $model->name))
+                : trim((string) $model->name);
+            $summary = $model instanceof Contact
+                ? trim((string) $model->body)
+                : ($model instanceof Order ? trim((string) $model->description) : trim((string) $model->email));
+            $createdAt = is_numeric($model->created_at) ? (int) $model->created_at : (strtotime((string) $model->created_at) ?: 0);
+            $submissionNotifications[] = [
+                'label' => $source['label'],
+                'title' => $title ?: Yii::t('app', 'New notification'),
+                'summary' => $summary,
+                'created_at' => $createdAt,
+                'url' => array_merge($source['url'], ['id' => $model->id]),
+            ];
+        }
+    }
+    usort($submissionNotifications, static fn ($left, $right) => $right['created_at'] <=> $left['created_at']);
+    $submissionNotifications = array_slice($submissionNotifications, 0, 5);
 }
-$unreadSubmissionCount = array_sum(array_column($submissionNotifications, 'count'));
+$unreadSubmissionCount = count($submissionNotifications);
 $identity = Yii::$app->user->isGuest ? null : Yii::$app->user->identity;
 $identityName = $identity === null ? '' : (trim((string) $identity->full_name) ?: $identity->username);
 
@@ -138,7 +158,7 @@ $this->registerLinkTag([
                         <li class="header-icon-action"><?= Html::a(Icon::show('search') . Html::tag('span', Yii::t('app', 'Search'), ['class' => 'sr-only']), ['/search/index'], ['aria-label' => Yii::t('app', 'Search')]) ?></li>
                     <?php endif; ?>
                     <?php if (!$isAdmin): ?><li><?= $this->render('_appearance', ['inSidebar' => false]) ?></li><?php endif; ?>
-                    <?php if ($canViewSubmissions): ?><li class="notification-control"><details><summary class="d-btn d-btn-square d-btn-ghost" aria-label="<?= Yii::t('app', 'Notifications') ?>"><?= Icon::show('bell') ?><?php if ($unreadSubmissionCount): ?><span class="notification-badge"><?= (int) $unreadSubmissionCount ?></span><?php endif; ?></summary><div class="notification-menu"><h2><?= Yii::t('app', 'Notifications') ?></h2><?php foreach ($submissionNotifications as $notification): ?><?= Html::a(Html::tag('span', Html::encode($notification['label'])) . Html::tag('strong', (string) $notification['count']), $notification['url'], ['class' => $notification['count'] ? 'has-unread' : null]) ?><?php endforeach; ?></div></details></li><?php endif; ?>
+                    <?php if ($canViewSubmissions): ?><li class="notification-control"><details><summary class="d-btn d-btn-square d-btn-ghost" aria-label="<?= Yii::t('app', 'Notifications') ?>"><?= Icon::show('bell') ?><?php if ($unreadSubmissionCount): ?><span class="notification-badge"><?= (int) $unreadSubmissionCount ?></span><?php endif; ?></summary><div class="notification-menu"><?php if ($submissionNotifications): ?><div class="notification-menu-heading"><h2><?= Yii::t('app', 'Notifications') ?></h2><?= Html::a(Icon::show('chevron-right'), ['/admin/notification/index'], ['class' => 'd-btn d-btn-sm d-btn-square d-btn-ghost', 'title' => Yii::t('app', 'View all notifications'), 'aria-label' => Yii::t('app', 'View all notifications')]) ?></div><?php foreach ($submissionNotifications as $notification): ?><?= Html::a('<span class="notification-menu-item-content"><strong>' . Html::encode($notification['title']) . '</strong><small>' . Html::encode($notification['label']) . ' · ' . Html::encode(Yii::$app->formatter->asRelativeTime($notification['created_at'])) . '</small>' . ($notification['summary'] !== '' ? '<em>' . Html::encode(mb_strimwidth($notification['summary'], 0, 90, '...')) . '</em>' : '') . '</span>' . Icon::show('chevron-left'), $notification['url'], ['class' => 'notification-menu-item']) ?><?php endforeach; ?><?php endif; ?><?= Html::a(Yii::t('app', 'View all notifications'), ['/admin/notification/index'], ['class' => 'notification-menu-footer']) ?></div></details></li><?php endif; ?>
                     <?php if (!Yii::$app->user->isGuest): ?>
                         <li class="nav-menu">
                             <details>
