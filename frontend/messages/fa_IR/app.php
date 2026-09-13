@@ -102,6 +102,7 @@ return [
     'Main navigation' => 'ناوبری اصلی',
     'Admin panel' => 'پنل مدیریت',
     'Dashboard' => 'پیشخوان',
+    'About system' => 'درباره سامانه',
     'Language' => 'زبان',
     'Breadcrumb' => 'مسیر صفحه',
     'Close' => 'بستن',

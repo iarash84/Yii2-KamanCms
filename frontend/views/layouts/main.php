@@ -216,6 +216,7 @@ $this->registerLinkTag([
                     </div>
                     <ul class="admin-nav">
                         <li><?= Html::a(Icon::show('dashboard') . Yii::t('app', 'Dashboard'), ['/admin'], ['aria-current' => $current('admin/dashboard')]) ?></li>
+                        
                         <?php if (Yii::$app->user->can('manageContent') || Yii::$app->user->can('manageMenus') || Yii::$app->user->can('managePages') || Yii::$app->user->can('manageMedia')): ?>
                             <li>
                                 <details class="admin-nav-group" data-admin-nav-group <?= $groupCurrent(['admin/home-section', 'admin/carousel', 'admin/menu', 'admin/page', 'admin/media']) ? 'open' : '' ?>>
@@ -294,6 +295,7 @@ $this->registerLinkTag([
                                 </details>
                             </li>
                         <?php endif; ?>
+                        <li><?= Html::a(Icon::show('info') . Yii::t('app', 'About system'), ['/admin/about/index'], ['aria-current' => $current('admin/about')]) ?></li>
                     </ul>
                     <p class="admin-nav-empty" data-admin-nav-empty hidden><?= Yii::t('app', 'No matching admin sections') ?></p>
                     <?= $this->render('_appearance', ['inSidebar' => true]) ?>
