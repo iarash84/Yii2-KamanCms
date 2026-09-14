@@ -33,6 +33,42 @@ npm run build
 - دکمه اصلی فقط برای اقدام اصلی، دکمه ghost برای عملیات کم‌اهمیت و رنگ danger فقط برای عملیات مخرب استفاده شود.
 - پس از تغییر View یا کلاس‌های Tailwind، `npm run build` اجرا و فایل `frontend/web/css/app.css` نیز ثبت شود.
 
+## ساختار CSS
+
+فایل `design-system.css` به بخشهای ساختاریافته تقسیم شده و توکنها به‌صورت semantic گروهبندی شده‌اند:
+
+- **Design tokens** (`:root`): Surfaces، Text، Borders، Brand palette، Status، Gradients، Footer palette، Accent، Elevation، Radii، Spacing، Layout/motion
+- **Semantic bridge** (`[data-theme]`): نگاشت توکنهای daisyUI به توکنهای سایت
+- **Dark theme** (`[data-theme="site-dark"]`): مقادیر تاریک + gradientها و رنگهای سفارشی
+- **Base rules**: ریست، تایپوگرافی، لینکها، کانتینر
+- **Components**: کارت، هدر، ناوبری، جدول، فرم، اعلان، فوتر، و…
+- **Public product**: استایلهای مخصوص سایت عمومی
+- **Preline-inspired application**: استایلهای ادمین و پنل
+
+توکنهای gradient و footer در `:root` و `[data-theme="site-dark"]` تعریف شده‌اند:
+
+```css
+:root {
+    --gradient-hero: linear-gradient(...);
+    --gradient-cta: ...;
+    --gradient-posts-deep: ...;
+    --gradient-brand: ...;
+    --color-footer-bg: #121927;
+    --color-footer-text: #c8cfdb;
+    --color-footer-heading: #f5f7fb;
+    --color-footer-link: #c8cfdb;
+    --color-footer-bottom: #929daf;
+    --color-mint: #1d725f;
+    --color-mint-soft: #dff6ef;
+    --shadow-brand: 0 9px 22px rgba(103, 87, 209, .24);
+}
+```
+
+کامپوننتهای daisyUI فقط شامل موارد استفادهشده می‌شوند (از `@plugin "daisyui" include: ...` در `src/app.css`):
+button, badge, input, select, textarea, checkbox, radio, toggle, fileinput, modal, tab, loading.
+
+در RTL، `letter-spacing` headings و `.text-overline` صفر است تا حروف فارسی به هم نچسبند.
+
 ## پروفایل کاربران
 
 - اطلاعات تکمیلی کاربر در جدول `user` نگهداری می‌شود؛ پس از دریافت نسخه جدید، migrationها را با `php yii migrate --interactive=0` اجرا کنید.

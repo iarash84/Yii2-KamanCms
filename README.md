@@ -181,19 +181,29 @@ php yii serve --docroot=frontend/web 127.0.0.1:8080
 
 ## توسعه رابط کاربری
 
-برای ساخت CSS هنگام توسعه و مشاهده تغییرات:
+### معماری CSS
+
+چهار فایل CSS اصلی در `frontend/web/css/` وجود دارد:
+
+- **`src/app.css`** — منبع اصلی: ورودی Tailwind v4، تنظیمات daisyUI (شامل `include` برای محدود کردن کامپوننتها) و تعریف تمهای سفارشی `site-light`/`site-dark`. **هرگز دستی ویرایش نکنید** — این فایل ورودی build است.
+- **`app.css`** — خروجی `npm run build`. هرگز ویرایش دستی نکنید. در Git ثبت می‌شود تا تغییرات hash را داشته باشید.
+- **`design-system.css`** — توکنهای طراحی (رنگ، فاصله، radius، سایه، گرادیان) و قواعد اختصاصی سایت. این منبع اصلی تمام استایلهای سفارشی KamanCMS است.
+- **`fonts.css`** — تعریف `@font-face` فونت اصلی.
+
+### ساخت CSS
 
 ```powershell
-npm run dev
+npm run dev        # watch mode برای توسعه
+npm run build      # ساخت minify شده برای production
 ```
 
-برای ساخت نسخه minifyشده قابل انتشار:
+⚠️ **مهم:** فایل `app.css` توسط `npm run build` از `src/app.css` تولید می‌شود. هرگز `app.css` را دستی ویرایش نکنید — تغییرات شما در `src/app.css` یا `design-system.css` باشند.
 
-```powershell
-npm run build
-```
+### قواعد
 
-در صفحه‌های جدید ابتدا از componentها و tokenهای موجود استفاده کنید. این کار ظاهر سایت را یک‌دست نگه می‌دارد و از CSS پراکنده یا ناسازگاری RTL و LTR جلوگیری می‌کند.
+- در صفحه‌های جدید ابتدا از componentها و tokenهای موجود استفاده کنید. این کار ظاهر سایت را یک‌دست نگه می‌دارد و از CSS پراکنده یا ناسازگاری RTL و LTR جلوگیری می‌کند.
+- توکنهای رنگ در `:root` به‌صورت semantic گروهبندی شده‌اند (surfaces, text, borders, brand, status, elevation, gradients, footer, radii, spacing).
+- گرادیانها، رنگهای footer و سایر مقادیر سختکد از توکنهای semantic مانند `--gradient-*`، `--color-footer-*` و `--color-mint-*` استفاده می‌کنند.
 
 ## افزودن زبان جدید
 
@@ -273,7 +283,10 @@ frontend/messages/      ترجمه رابط کاربری
 frontend/models/        مدل‌های سایت و فرم‌ها
 frontend/modules/admin/ پنل مدیریت
 frontend/views/         قالب و صفحات عمومی
-frontend/web/           Document Root، CSS، JavaScript و تصاویر
+frontend/web/           Document Root
+frontend/web/css/       فایلهای CSS: src/app.css (منبع)، app.css (خروجی)،
+                        design-system.css (توکنها و قواعد)، fonts.css (فونت)
+frontend/web/js/        JavaScript بدون فریم‌ورک
 tests/                  تست‌های واحد و یکپارچه
 ```
 
