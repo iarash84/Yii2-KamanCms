@@ -10,6 +10,7 @@ $categoryLabels = [
     'اصلاح‌شده' => ['label' => '🐛 رفع مشکلات', 'class' => 'is-fix'],
     'تغییرکرده' => ['label' => '⚡ بهبودها', 'class' => 'is-improvement'],
     'امنیتی' => ['label' => '🔐 تغییرات امنیتی', 'class' => 'is-security'],
+    'حذف‌شده' => ['label' => '🗑️ حذفها', 'class' => 'is-fix'],
 ];
 ?>
 
@@ -44,7 +45,7 @@ $categoryLabels = [
         </section>
 
         <section class="card about-system-section" aria-labelledby="technical-title">
-            <div class="about-system-section-heading"><span class="card-icon"><?= Icon::show('settings') ?></span><div><p class="text-overline">Runtime details</p><h2 id="technical-title">مشخصات فنی</h2></div></div>
+            <div class="about-system-section-heading"><span class="card-icon"><?= Icon::show('settings') ?></span><div><p class="text-overline">System overview</p><h2 id="technical-title">اطلاعات سامانه</h2></div></div>
             <dl class="technical-list">
                 <?php foreach ($technicalInfo as $label => $value) : ?>
                     <div><dt><?= Html::encode($label) ?></dt><dd class="ltr"><?= Html::encode($value) ?></dd></div>

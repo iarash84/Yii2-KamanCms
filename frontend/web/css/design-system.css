@@ -986,6 +986,7 @@ input[type="file"]::file-selector-button { min-height: 2rem; margin-inline-end: 
 .release-note-group.is-fix { border-block-start: 3px solid var(--color-danger); }
 .release-note-group.is-improvement { border-block-start: 3px solid var(--color-secondary-500); }
 .release-note-group.is-security { border-block-start: 3px solid var(--color-primary-600); }
+.release-note-group.is-delete { border-block-start: 3px solid var(--color-danger-hover); }
 .about-system-links { display: flex; flex-wrap: wrap; gap: var(--space-3); }
 .about-system-link { display: inline-flex; align-items: center; gap: .5rem; min-height: 2.5rem; padding: .55rem .8rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm); color: var(--color-text); background: var(--color-surface-muted); font-size: .84rem; font-weight: 650; }
 .about-system-link:hover { border-color: var(--color-primary-500); color: var(--color-primary-700); background: var(--color-primary-50); }

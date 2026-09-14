@@ -6,9 +6,9 @@ return [
     'user.passwordResetTokenExpire' => 3600,
     'systemInfo' => [
         'name' => 'Kaman CMS',
-        'version' => getenv('APP_VERSION') ?: '0.1.0',
+        'version' => getenv('APP_VERSION') ?: '1.3.0',
         'status' => 'Stable',
-        'releaseDate' => getenv('APP_RELEASE_DATE') ?: '2026-09-12',
+        'releaseDate' => getenv('APP_RELEASE_DATE') ?: '2026-09-14',
         'links' => [
             'github' => 'https://github.com/iarash84/Yii2-KamanCms',
             'documentation' => 'https://github.com/iarash84/Yii2-KamanCms/tree/main/docs',
