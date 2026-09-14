@@ -10,7 +10,9 @@
   themes: false;
   prefix: "d-";
   logs: false;
-  exclude: rootscrollgutter;
+  include: properties, rootcolor, rootscrolllock, scrollbar, svg,
+           button, badge, input, select, textarea, checkbox, radio, toggle, fileinput,
+           modal, tab, loading;
 }
 
 @plugin "daisyui/theme" {
