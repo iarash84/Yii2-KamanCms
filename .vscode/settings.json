@@ -3,6 +3,10 @@
         "/^php -l frontend/messages/fa_IR/app\\.php$/": {
             "approve": true,
             "matchCommandLine": true
+        },
+        "/^node --check scripts/check-css-duplicates\\.js; node -e \"JSON\\.parse\\(require\\('fs'\\)\\.readFileSync\\('package\\.json','utf8'\\)\\); console\\.log\\('package\\.json valid'\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
         }
     }
 }

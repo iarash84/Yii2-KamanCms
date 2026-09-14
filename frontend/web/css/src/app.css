@@ -78,3 +78,12 @@
 }
 
 @custom-variant dark (&:where([data-theme="site-dark"], [data-theme="site-dark"] *));
+
+@layer utilities {
+  .d-input-bordered,
+  .d-select-bordered,
+  .d-textarea-bordered,
+  .d-file-input-bordered {
+    border-style: solid;
+  }
+}

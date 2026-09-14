@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "dev": "tailwindcss -i ./frontend/web/css/src/app.css -o ./frontend/web/css/app.css --watch",
-    "build": "tailwindcss -i ./frontend/web/css/src/app.css -o ./frontend/web/css/app.css --minify"
+    "build": "tailwindcss -i ./frontend/web/css/src/app.css -o ./frontend/web/css/app.css --minify",
+    "check:css": "node scripts/check-css-duplicates.js"
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.1.0",
