@@ -44,7 +44,7 @@ php vendor/bin/phpunit --configuration phpunit.xml.dist --filter testLoginIsBloc
 
 شمار تست‌ها: **۱۲۵ تست، ۷۸۳ assertion** (۵ unit + ۱۲۰ integration).
 
-### امنیت و یکپارچگی (اولویت ۱)
+### امنیت و یکپارچگی
 
 | فایل تست | پوشش |
 | --- | --- |

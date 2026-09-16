@@ -70,11 +70,13 @@ class NotificationServiceTest extends DatabaseTestCase
      */
     public function testMarkAllSubmissionsReadClearsUnreadState(): void
     {
-        foreach ([
+        foreach (
+            [
             new Contact(['name' => 'C', 'email' => 'c@example.test', 'subject' => 's', 'body' => 'b']),
             new Order(['name' => 'O', 'email' => 'o@example.test', 'description' => 'd']),
             new Opportunity(['name' => 'P', 'email' => 'p@example.test']),
-        ] as $model) {
+            ] as $model
+        ) {
             $model->save(false);
         }
 
