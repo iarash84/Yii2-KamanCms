@@ -273,6 +273,8 @@ return [
     'Restoring replaces current application data and cannot be undone.' => 'بازیابی، داده‌های فعلی را جایگزین می‌کند و قابل بازگشت نیست.',
     'Are you sure you want to restore this backup?' => 'آیا از بازیابی این نسخه پشتیبان اطمینان دارید؟',
     'Select a valid backup file.' => 'یک فایل پشتیبان معتبر انتخاب کنید.',
+    'The backup file could not be read.' => 'خواندن فایل پشتیبان امکان‌پذیر نیست.',
+    'The backup file is invalid.' => 'فایل پشتیبان نامعتبر است.',
     'Backup restored successfully.' => 'نسخه پشتیبان با موفقیت بازیابی شد.',
     'FAQ management' => 'مدیریت پرسش‌های متداول',
     'Help center' => 'مرکز راهنما',

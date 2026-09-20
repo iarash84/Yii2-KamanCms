@@ -1,11 +1,24 @@
 <?php
+
+$requiredDatabaseVariables = ['DB_HOST', 'DB_PORT', 'DB_NAME', 'DB_USER', 'DB_PASSWORD'];
+foreach ($requiredDatabaseVariables as $variable) {
+    if (getenv($variable) === false || trim((string) getenv($variable)) === '') {
+        throw new RuntimeException($variable . ' must be configured in production.');
+    }
+}
+
 return [
     'components' => [
         'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => sprintf('mysql:host=%s;port=%s;dbname=%s', getenv('DB_HOST') ?: '127.0.0.1', getenv('DB_PORT') ?: '3306', getenv('DB_NAME') ?: 'yii2_kamancms'),
-            'username' => getenv('DB_USER') ?: 'root',
-            'password' => getenv('DB_PASSWORD') !== false ? getenv('DB_PASSWORD') : '',
+            'dsn' => sprintf(
+                'mysql:host=%s;port=%s;dbname=%s',
+                getenv('DB_HOST'),
+                getenv('DB_PORT'),
+                getenv('DB_NAME')
+            ),
+            'username' => getenv('DB_USER'),
+            'password' => getenv('DB_PASSWORD'),
             'charset' => 'utf8mb4',
         ],
         'mailer' => [

@@ -25,9 +25,25 @@ class BackupController extends Controller
     public function actionRestore()
     {
         $file = UploadedFile::getInstanceByName('backupFile');
-        if (!$file || $file->size > 50 * 1024 * 1024 || strtolower($file->extension) !== 'json') {
+        $isJson = $file !== null && strtolower((string) $file->extension) === 'json';
+        $isWithinLimit = $file !== null && (int) $file->size <= 50 * 1024 * 1024;
+
+        if (!$file || !$isWithinLimit || !$isJson || $file->error !== UPLOAD_ERR_OK) {
             throw new \yii\web\BadRequestHttpException(Yii::t('app', 'Select a valid backup file.'));
-        } BackupService::restore(file_get_contents($file->tempName));
+        }
+
+        $contents = file_get_contents($file->tempName);
+        if ($contents === false || trim($contents) === '') {
+            throw new \yii\web\BadRequestHttpException(Yii::t('app', 'The backup file could not be read.'));
+        }
+
+        try {
+            BackupService::restore($contents);
+        } catch (\JsonException | \RuntimeException $exception) {
+            Yii::warning('Backup restore rejected: ' . $exception->getMessage(), __METHOD__);
+            throw new \yii\web\BadRequestHttpException(Yii::t('app', 'The backup file is invalid.'));
+        }
+
         Yii::$app->session->setFlash('success', Yii::t('app', 'Backup restored successfully.'));
         return $this->redirect(['index']);
     }
