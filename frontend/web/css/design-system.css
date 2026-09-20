@@ -1030,7 +1030,7 @@ input[type="file"]::file-selector-button { min-height: 2rem; margin-inline-end: 
 .profile-account-context span { color: var(--color-text-muted); font-size: .75rem; }
 .profile-account-context p { grid-column: 1 / -1; margin: 0; color: var(--color-text-muted); font-size: .78rem; }
 .user-profile-editor { display: grid; grid-template-columns: minmax(12rem, 15rem) minmax(0, 1fr); gap: var(--space-6); align-items: start; }
-.user-avatar-panel { display: grid; justify-items: start; gap: var(--space-3); padding: var(--space-4); border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface-muted); }
+.user-avatar-panel { display: grid; justify-items: center; gap: var(--space-3); padding: var(--space-4); border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface-muted); text-align: center; }
 .user-avatar-panel .form-group { width: 100%; margin: 0; }
 .user-avatar-panel p { margin: .2rem 0 0; font-size: .75rem; }
 .user-avatar-preview { display: grid; width: 6rem; height: 6rem; place-items: center; overflow: hidden; border: 1px solid var(--color-border-strong); border-radius: 50%; color: var(--color-primary-700); background: var(--color-primary-50); font-size: 2rem; font-weight: 700; }
