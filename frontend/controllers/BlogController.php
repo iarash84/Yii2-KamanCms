@@ -18,7 +18,7 @@ class BlogController extends Controller
 
         return $this->render('index', [
             'searchModel' => $searchModel,
-            'categoryModels' => Category::find()->all(),
+            'categoryModels' => Category::find()->with('translations')->all(),
             'dataProvider' => $searchModel->search(\Yii::$app->request->queryParams),
             'tagModels' => BlogTag::find()->joinWith('posts')->groupBy('blog_tag.id')->orderBy(['blog_tag.name' => SORT_ASC])->all(),
         ]);
@@ -34,11 +34,12 @@ class BlogController extends Controller
     public function actionCategory($id)
     {
         $searchModel = new BlogSearch();
-        $query = Blog::find()->with(['tags', 'category', 'user'])->andWhere(['category_id' => $id])->orderBy(['created_at' => SORT_DESC, 'id' => SORT_DESC]);
+        $query = Blog::find()->with(['translations', 'tags', 'category', 'user'])
+            ->andWhere(['category_id' => $id])->orderBy(['created_at' => SORT_DESC, 'id' => SORT_DESC]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
-            'categoryModels' => Category::find()->all(),
+            'categoryModels' => Category::find()->with('translations')->all(),
             'dataProvider' => new ActiveDataProvider(['query' => $query]),
             'tagModels' => BlogTag::find()->orderBy(['name' => SORT_ASC])->all(),
         ]);
@@ -46,7 +47,7 @@ class BlogController extends Controller
 
     protected function findModel($id)
     {
-        if (($model = Blog::findOne($id)) !== null) {
+        if (($model = Blog::find()->with(['translations', 'tags', 'category', 'user'])->where(['id' => $id])->one()) !== null) {
             return $model;
         }
 

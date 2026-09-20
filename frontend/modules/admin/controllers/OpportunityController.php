@@ -85,6 +85,15 @@ class OpportunityController extends Controller
         ]);
     }
 
+    public function actionDetail($id)
+    {
+        $model = $this->findModel($id);
+        if ($model->read_at === null) {
+            $model->updateAttributes(['read_at' => time()]);
+        }
+        return $this->renderPartial('_detail', ['model' => $model]);
+    }
+
     public function actionDownload($id)
     {
         $model = $this->findModel($id);

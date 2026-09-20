@@ -2,7 +2,7 @@
 
 ## CSS بارگذاری نمی‌شود
 
-Document Root را روی `frontend/web` قرار دهید، `npm run build` را اجرا کنید و دسترسی نوشتن asset/runtime را بررسی کنید. در وب‌سرور داخلی از فرمان README استفاده کنید.
+Document Root را روی `frontend/web` قرار دهید، `npm run build` را اجرا کنید و دسترسی نوشتن asset/runtime را بررسی کنید. فایل `frontend/web/css/app.css` خروجی build از `src/app.css` است؛ هرگز `app.css` را دستی ویرایش نکنید. در وب‌سرور داخلی از فرمان README استفاده کنید.
 
 ## اتصال دیتابیس برقرار نیست
 

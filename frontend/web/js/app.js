@@ -170,6 +170,34 @@
         reader.readAsDataURL(file);
     });
 
+    document.querySelectorAll('[data-resume-input]').forEach(function (input) {
+        const panel = input.closest('.resume-upload-panel');
+        const label = panel ? panel.querySelector('.resume-upload-button') : null;
+        const output = panel ? panel.querySelector('[data-resume-filename]') : null;
+        const defaultText = label ? label.textContent : '';
+        input.addEventListener('change', function () {
+            const file = input.files && input.files[0];
+            if (!output) return;
+            if (file) {
+                output.textContent = file.name;
+                output.hidden = false;
+                if (label) {
+                    label.textContent = label.dataset.replaceLabel || defaultText;
+                    label.classList.add('has-file');
+                }
+                if (panel) panel.classList.add('has-file');
+            } else {
+                output.hidden = true;
+                output.textContent = '';
+                if (label) {
+                    label.textContent = defaultText;
+                    label.classList.remove('has-file');
+                }
+                if (panel) panel.classList.remove('has-file');
+            }
+        });
+    });
+
     const confirmationDialog = document.querySelector('[data-confirmation-dialog]');
     if (confirmationDialog) {
         let pendingConfirmation = null;

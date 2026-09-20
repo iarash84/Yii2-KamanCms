@@ -42,7 +42,7 @@ class BlogSearch extends Blog
      */
     public function search($params)
     {
-        $query = Blog::find()->with(['tags', 'category', 'user']);
+        $query = Blog::find()->with(['translations', 'tags', 'category', 'user']);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

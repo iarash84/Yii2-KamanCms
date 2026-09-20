@@ -25,7 +25,9 @@ class OpportunityForm extends Model
         return [
             // name, email, subject and body are required
             [['name', 'email'], 'required'],
-            [['name', 'email', 'phoneNumber'], 'filter', 'filter' => 'trim'],
+            [['name', 'email', 'phoneNumber'], 'filter', 'filter' => static function ($value) {
+                return trim((string) $value);
+            }],
             [['name'], 'string', 'max' => 255],
             [['resume'], 'file', 'extensions' => ['pdf'], 'mimeTypes' => ['application/pdf'],
                 'maxSize' => 5 * 1024 * 1024, 'checkExtensionByMimeType' => true],

@@ -16,6 +16,8 @@ DB_NAME=yii2_kamancms
 DB_USER=app_user
 DB_PASSWORD=
 MAIL_USE_FILE_TRANSPORT=0
+APP_ANALYTICS_KEY=
+APP_ANALYTICS_QUEUE_PATH=storage/analytics-queue
 ```
 
 برای مقدارهای دارای فاصله از کوتیشن استفاده کنید. دسترسی کاربر دیتابیس را به همان دیتابیس محدود کنید و از حساب root در production استفاده نکنید.
@@ -33,4 +35,4 @@ MAIL_USE_FILE_TRANSPORT=0
 
 ## مسیرهای قابل‌نوشتن
 
-به کاربر وب‌سرور فقط برای `runtime`، assetهای تولیدشده و پوشه‌های upload لازم مجوز نوشتن بدهید. ریشه پروژه، پوشه config و فایل `.env` نباید قابل‌نوشتن عمومی باشند.
+به کاربر وب‌سرور فقط برای `runtime`، assetهای تولیدشده، پوشه‌های upload و مسیر صف Analytics مجوز نوشتن بدهید. ریشه پروژه، پوشه config و فایل `.env` نباید قابل‌نوشتن عمومی باشند.

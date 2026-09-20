@@ -13,7 +13,7 @@ class PageController extends Controller
     public function actionView($slug)
     {
         $language = Yii::$app->languageManager->activeLanguage;
-        $query = Page::published();
+        $query = Page::published()->with(['translations', 'featuredMedia']);
         if ($language === Yii::$app->languageManager->defaultLanguage) {
             $page = $query->andWhere(['slug' => $slug])->one();
         } else {

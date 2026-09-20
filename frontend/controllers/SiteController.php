@@ -76,14 +76,12 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $homepageSettings = Setting::find()->with('translations')
-            ->where(['type' => ['CompanyName', 'Home']])->indexBy('type')->all();
-        $siteTitle = isset($homepageSettings['CompanyName'])
-            ? trim((string) $homepageSettings['CompanyName']->getLocalizedContent())
-            : '';
-        $homeContent = isset($homepageSettings['Home'])
-            ? trim((string) $homepageSettings['Home']->getLocalizedContent())
-            : '';
+        $homepageSettings = $this->view->params['settingValues'] = Setting::localizedMap([
+            'CompanyName', 'Address', 'Email', 'PhoneNumber', 'Facebook', 'Twitter',
+            'Linkedin', 'Instagram', 'Youtube', 'Telegram', 'Aparat', 'Home',
+        ]);
+        $siteTitle = trim((string) ($homepageSettings['CompanyName'] ?? ''));
+        $homeContent = trim((string) ($homepageSettings['Home'] ?? ''));
 
         return $this->render('index', [
             'siteTitle' => $siteTitle !== '' ? $siteTitle : Yii::t('app', 'Website'),
@@ -171,7 +169,8 @@ class SiteController extends Controller
     public function actionSample(){
 
         $dataProvider = new ActiveDataProvider([
-            'query' => Sample::find(),
+            'query' => Sample::find()->with('translations')->orderBy(['created_at' => SORT_DESC, 'id' => SORT_DESC]),
+            'pagination' => ['pageSize' => 20],
         ]);
 
         return $this->render('sample' , [
@@ -190,8 +189,10 @@ class SiteController extends Controller
             PublicRateLimiter::enforce('opportunity');
         }
         $model = new OpportunityForm();
-        $model->resume = UploadedFile::getInstance($model, 'resume');
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $model->resume = UploadedFile::getInstance($model, 'resume');
+        }
+        if ($model->validate()) {
 
             $opportunity= new Opportunity();
             if (!empty($model->resume)) {
@@ -238,7 +239,8 @@ class SiteController extends Controller
      */
     public function actionFaqs()
     {
-        $models = Faqs::find()->where(['status' => 1])->orderBy(['sort_order' => SORT_ASC, 'id' => SORT_ASC])->all();
+        $models = Faqs::find()->with('translations')->where(['status' => 1])
+            ->orderBy(['sort_order' => SORT_ASC, 'id' => SORT_ASC])->all();
         return $this->render('faqs', ['models' => $models]);
     }
 

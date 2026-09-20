@@ -62,22 +62,4 @@ class ChangePasswordForm extends Model
         ];
     }
 
-    /**
-     * Sends an email to the specified email address using the information collected by this model.
-     *
-     * @param  string  $email the target email address
-     * @return boolean whether the email was sent
-     */
-    public function saveContact()
-    {
-//        $contactUsModel = new Contact();
-//        $contactUsModel->name = $this->name;
-//        $contactUsModel->email = $this->email;
-//        $contactUsModel->phoneNumber = $this->phoneNumber;
-//        $contactUsModel->subject = $this->subject;
-//        $contactUsModel->body = $this->body;
-//        if($contactUsModel->save())
-            return true;
-        return false;
-    }
 }

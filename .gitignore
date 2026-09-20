@@ -40,3 +40,5 @@ phpunit.phar
 /.env.installer-backup
 /.phpunit.cache/
 docs/product-review.md
+/storage/analytics-queue/*
+!/storage/analytics-queue/.gitkeep

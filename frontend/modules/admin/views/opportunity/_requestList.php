@@ -1,8 +1,10 @@
 <?php
 
-use yii\grid\GridView;
 use frontend\widgets\AdminActionColumn;
+use frontend\widgets\Icon;
+use yii\grid\GridView;
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 
 ?>
@@ -36,9 +38,30 @@ use yii\helpers\Html;
                 'class' => 'yii\grid\DataColumn',
                 'headerOptions' => ['style'=>'text-align:center;'],
                 'contentOptions' => ['style'=>'text-align:center;'],
-                'attribute' => 'email'
+                'attribute' => 'email',
             ],
-            //'resume',
+            [
+                'label' => Yii::t('app', 'Resume'),
+                'format' => 'raw',
+                'headerOptions' => ['style' => 'text-align:center;'],
+                'contentOptions' => ['style' => 'text-align:center;'],
+                'value' => static function ($model) {
+                    if (trim((string) $model->resume) === '') {
+                        return Html::tag('span', Yii::t('app', 'No resume attached'), ['class' => 'text-muted']);
+                    }
+                    return Html::a(
+                        Icon::show('download', ['width' => 16, 'height' => 16]) . Yii::t('app', 'Download resume'),
+                        Url::to(['download', 'id' => $model->id]),
+                        [
+                            'class' => 'opportunity-resume-chip',
+                            'title' => Yii::t('app', 'Download resume'),
+                            'aria-label' => Yii::t('app', 'Download resume'),
+                            'download' => 'resume-' . $model->id,
+                            'data-pjax' => '0',
+                        ]
+                    );
+                },
+            ],
             [
                 'class' => 'yii\grid\DataColumn',
                 'headerOptions' => ['style'=>'text-align:center;'],
@@ -59,9 +82,17 @@ use yii\helpers\Html;
             ],
             [
                 'class' => AdminActionColumn::class,
-                'template' => '{view} {delete}'
+                'template' => '{detail} {delete}',
+                'buttons' => [
+                    'detail' => static fn ($url, $model) => Html::button(Icon::show('eye'), [
+                        'class' => 'd-btn d-btn-sm d-btn-square d-btn-ghost',
+                        'data-remote-dialog-url' => Url::to(['detail', 'id' => $model->id]),
+                        'data-error-message' => Yii::t('app', 'Unable to load details.'),
+                        'aria-label' => Yii::t('app', 'View'),
+                        'title' => Yii::t('app', 'View'),
+                    ]),
+                ],
             ],
         ],
     ]); ?>
-    <br /><br />
 </div>

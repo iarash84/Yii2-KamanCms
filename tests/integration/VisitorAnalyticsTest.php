@@ -2,14 +2,50 @@
 
 namespace tests\integration;
 
+use common\components\AnalyticsProcessor;
+use common\components\AnalyticsQueue;
 use frontend\models\VisitorReport;
 use frontend\models\Contact;
 use frontend\models\Order;
 use tests\Support\DatabaseTestCase;
 use Yii;
+use yii\db\Query;
 
 class VisitorAnalyticsTest extends DatabaseTestCase
 {
+    public function testQueuedAnalyticsIsProcessedOnce(): void
+    {
+        $directory = sys_get_temp_dir() . '/analytics-' . bin2hex(random_bytes(4));
+        $queue = new AnalyticsQueue($directory);
+        $event = [
+            'event_id' => 'event-1',
+            'date' => gmdate('Y-m-d'),
+            'path' => '/fa/blog',
+            'country' => 'IR',
+            'visitor_hash' => hash('sha256', 'visitor-1'),
+        ];
+
+        try {
+            $queue->enqueue($event);
+            $queue->enqueue($event);
+            $file = $queue->claim();
+            self::assertNotNull($file);
+            self::assertSame(2, (new AnalyticsProcessor())->processFile($file));
+            $queue->complete($file);
+
+            self::assertSame(1, (int) (new Query())->from('{{%visitor_daily}}')->sum('page_views'));
+            self::assertSame(1, (int) (new Query())->from('{{%visitor_daily}}')->sum('visitors'));
+            self::assertSame(1, (int) (new Query())->from('{{%visitor_page_daily}}')->sum('page_views'));
+        } finally {
+            if (is_dir($directory)) {
+                foreach (glob($directory . '/*') ?: [] as $file) {
+                    @unlink($file);
+                }
+                @rmdir($directory);
+            }
+        }
+    }
+
     public function testAnalyticsPermissionBelongsToAdministratorsButNotEditors(): void
     {
         $editor = $this->createUser('editor', 'analytics-editor');

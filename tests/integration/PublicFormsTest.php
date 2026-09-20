@@ -53,9 +53,19 @@ class PublicFormsTest extends DatabaseTestCase
 
     public function testInvalidPublicFormsAreRejected(): void
     {
-        $contact = new ContactForm(['email' => 'invalid', 'verifyCode' => 'wrong']);
-        $order = new OrderForm(['email' => 'invalid', 'verifyCode' => 'wrong']);
-        $opportunity = new OpportunityForm(['email' => 'invalid', 'verifyCode' => 'wrong']);
+        // Populate every attribute with an empty string (as a real browser submission
+        // would send), so the 'trim' filters never receive null on PHP 8.3+.
+        $contact = new ContactForm([
+            'name' => '', 'email' => 'invalid', 'phoneNumber' => '', 'subject' => '',
+            'body' => '', 'verifyCode' => 'wrong',
+        ]);
+        $order = new OrderForm([
+            'name' => '', 'email' => 'invalid', 'company' => '', 'phoneNumber' => '',
+            'website' => '', 'description' => '', 'verifyCode' => 'wrong',
+        ]);
+        $opportunity = new OpportunityForm([
+            'name' => '', 'email' => 'invalid', 'phoneNumber' => '', 'verifyCode' => 'wrong',
+        ]);
         self::assertFalse($contact->validate());
         self::assertFalse($order->validate());
         self::assertFalse($opportunity->validate());
